@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block body %}
+<script>
+    var app = angular.module('myApp',[]);
+    app.controller('eventsCtrl', function($scope, $http, $timeout){
+        $scope.response = [];
+        (function update(){
+            $http.get('http://localhost:5000/get_events')
+                    .success(function(response) {
+                        $scope.events = response.result.events;
+                        console.log($scope.events);
+                    });
+            $timeout(update,300000);
+        })();
+        $scope.formatDate = function(date){
+            var thisDate = new Date;
+            thisDate.setTime(Date.parse(date));
+            console.log(thisDate);
+            return thisDate.toUTCString();
+        };
+    });
+    var timerController = function($scope)
+</script>
+
+<h1>Events:</h1>
+
+<div ng-app="myApp" ng-controller="eventsCtrl">
+    <table>
+        <tbody>
+        <tr ng-repeat="e in events">
+            <th ng-bind="e.summary"></th>
+            <td ng-bind="formatDate(e.start)"></td>
+            <td ng-bind="formatDate(e.end)"></td>
+            <td ng-bind="e.location"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
