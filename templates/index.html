@@ -10,14 +10,23 @@
                         $scope.events = response.result.events;
                         console.log($scope.events);
                     });
-            $timeout(update,100000);
+            $timeout(update,1000000);
         })();
-        $scope.formatDate = function(date){
-            var thisDate = new Date;
+//        $scope.formatDate = function(date){
+//            var thisDate = Date.parse(date);
+////            thisDate.setTime(Date.parse(date));
+//            console.log(thisDate);
+//            var minutes = Math.floor(((thisDate / (60000)) % 60));
+//            var hours = Math.floor(((thisDate / (3600000)) % 24));
+//            return hours + ":" +minutes;
+//            };
+        $scope.formatDate = function(date)
+        {
+            var thisDate = new Date();
             thisDate.setTime(Date.parse(date));
-            console.log(thisDate);
-            return Date.parse(date);
-            };
+            console.log("event time:" + thisDate.getHours() + ":" + thisDate.getMinutes());
+            return thisDate.getHours() + ":" + thisDate.getMinutes();
+        };
         $scope.getMachineTime = function(date){
             return Date.parse(date);
         };
@@ -26,13 +35,6 @@
             return new Date().getTime();
         };
 
-//        $scope.countdown= 1200;
-//        $scope.setCountdown = function(newVal) {
-//            $scope.countdown =newVal;
-//            $timeout(function(){
-//                $scope.$broadcast('timer-start');
-//            },5000);
-//        };
         $scope.countTime = function(date) {
             var interval = Date.parse(date) - new Date().getTime();
             console.log(interval);
@@ -51,24 +53,20 @@
     <table>
         <tbody>
         <tr ng-repeat="e in events">
-            <th ng-bind="e.summary"></th>
             <td ng-bind="formatDate(e.start)"></td>
+            <th ng-bind="e.summary"></th>
             <td ng-bind="formatDate(e.end)"></td>
             <!--td ng-bind="e.location"></td-->
             <!--td ng-bind="getTimeNow()"></td-->
             <!--td ng-bind="countTime(e.start)"></td-->
             <!--<td ng-if="getMachineTime(e.start)-getTimeNow() <= 120000000">-->
             <td ng-if="countTime(e.start)>0">
-            <timer interval="1000" countdown="countTime(e.start)/1000">{{days|angular}}:{{hours|angular}}:{{minutes|angular}}:{{seconds|angular}}</timer>
+            <timer interval="1000" countdown="countTime(e.start)/1000">{{minutes|angular}}:{{seconds|angular}}</timer>
             </td>
         </tr>
         </tbody>
     </table>
-    <button ng-click="stopTimer()">set to 20</button>
-    countdown: <text ng-bind="countdown"></text>
-    <br />
-    new countdown: {{ countdown|angular }}
-    <br />
+    <button ng-click="stopTimer()">Stop Timer</button>
 
 </div>
 
