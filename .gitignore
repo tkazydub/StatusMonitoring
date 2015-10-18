@@ -1,4 +1,6 @@
 .idea/
-client_secret.json
-bower_components/
 venv/
+*.pyc
+support/*.pyc
+.DS_Store
+*/.DS_Store

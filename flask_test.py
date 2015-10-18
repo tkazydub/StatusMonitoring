@@ -1,9 +1,11 @@
-from flask import Flask,jsonify, render_template, request
+from flask import Flask,jsonify, render_template, request, send_from_directory, url_for
 from support.get_jenkins_jobs import JenkinsFeatures
 from support.get_calendar_events import CalendarEvents
 from support.database import WriteToDb
-app = Flask(__name__)
+from flask.ext.triangle import Triangle
 
+app = Flask(__name__)
+Triangle(app)
 
 DATABASE = 'support/test.db'
 db = WriteToDb(DATABASE)
@@ -27,6 +29,15 @@ def get_events():
 def jenkins():
     return JenkinsFeatures().get_jenkins_log()
 
+@app.route('/bower_components/<path:path>')
+def send_js(path):
+    print "path: " + str(path)
+    return send_from_directory("bower_components",path)
+
+@app.route('/index/sounds/<path:path>')
+def send_sound(path):
+    print "path: " + str(path)
+    return send_from_directory("sounds",path)
 
 # @app.route('/events')
 # def events():

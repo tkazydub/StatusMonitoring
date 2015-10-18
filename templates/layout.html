@@ -1,9 +1,10 @@
 <!doctype html>
-<title>jQuery Example</title>
-<script type="text/javascript"
-  src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-<script type="text/javascript">
-  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-</script>
+<html data-ng-app>
+<head>
+<title>Status Monitoring</title>
+<script src="../bower_components/angular/angular.min.js"></script>
+<script src="../static/timer.js"></script>
+<script src="../bower_components/angular-audio/app/angular.audio.js"></script>
+</head>
 {% block body %}{% endblock %}
+</html>
