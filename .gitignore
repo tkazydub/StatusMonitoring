@@ -2,3 +2,4 @@
 venv/
 *.pyc
 support/*.pyc
+.DS_Store
