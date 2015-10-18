@@ -2,13 +2,13 @@
 {% block body %}
 <script>
     var app = angular.module('myApp',['timer','ngAudio']);
-    app.controller('eventsCtrl', function( $scope, $http, $timeout){
+    app.controller('eventsCtrl', function($rootScope, $scope, $http, $timeout){
         $scope.events = null;
         (function update(){
             $http.get('http://localhost:5000/get_events')
                     .success(function(response) {
                         $scope.events = response.result.events;
-                        console.log($scope.events);
+//                        console.log($scope.events);
                     });
             $timeout(update,1000000);
         })();
@@ -17,7 +17,7 @@
         {
             var thisDate = new Date();
             thisDate.setTime(Date.parse(date));
-            console.log("event time:" + thisDate.getHours() + ":" + thisDate.getMinutes());
+//            console.log("event time:" + thisDate.getHours() + ":" + thisDate.getMinutes());
             return thisDate.getHours() + ":" + thisDate.getMinutes();
         };
         $scope.getMachineTime = function(date){
@@ -30,16 +30,21 @@
 
         $scope.countTime = function(date) {
             var interval = Date.parse(date) - new Date().getTime();
-            console.log(interval);
+//            console.log(interval);
             return interval;
         };
         $scope.stopTimer = function() {
           $scope.$broadcast('timer-stop');
         };
+        $scope.$on('timer-stopped', function (event, data){
+                console.log('Timer Stopped - data = ', data);
+                $rootScope.$broadcast('playNotificationEvent');
+            });
     });
 
     app.controller('playSound', function($scope, ngAudio){
-        var sound = ngAudio.load("sounds/test.mp3");
+        $scope.$on('playNotificationEvent',function(){$scope.playMusic()})
+        var sound = ngAudio.load("sounds/notification.mp3");
             $scope.playMusic = function(){
               sound.play();
             };
@@ -64,10 +69,6 @@
                 <td ng-bind="formatDate(e.start)"></td>
                 <th ng-bind="e.summary"></th>
                 <td ng-bind="formatDate(e.end)"></td>
-                <!--td ng-bind="e.location"></td-->
-                <!--td ng-bind="getTimeNow()"></td-->
-                <!--td ng-bind="countTime(e.start)"></td-->
-                <!--<td ng-if="getMachineTime(e.start)-getTimeNow() <= 120000000">-->
                 <td ng-if="countTime(e.start)>0">
                 <timer interval="1000" countdown="countTime(e.start)/1000">{{minutes|angular}}:{{seconds|angular}}</timer>
                 </td>
