@@ -1,4 +1,4 @@
-from flask import Flask,jsonify, render_template, request, send_from_directory, url_for
+from flask import Flask, jsonify, render_template, request, send_from_directory, url_for
 from support.get_jenkins_jobs import JenkinsFeatures
 from support.get_calendar_events import CalendarEvents
 from support.database import WriteToDb
@@ -31,12 +31,12 @@ def jenkins():
 
 @app.route('/bower_components/<path:path>')
 def send_js(path):
-    print "path: " + str(path)
+    print("path: " + str(path))
     return send_from_directory("bower_components",path)
 
 @app.route('/index/sounds/<path:path>')
 def send_sound(path):
-    print "path: " + str(path)
+    print("path: " + str(path))
     return send_from_directory("sounds",path)
 
 # @app.route('/events')
@@ -54,6 +54,10 @@ def index():
 @app.route("/events", methods=['GET'])
 def echo():
     return str(CalendarEvents().get_events())
+
+@app.route('/LastBuild', methods=['GET'])
+def last_build():
+    JenkinsFeatures().get_last_build_info(request.form['jobName'])
 
 # @app.teardown_appcontext
 # def close_connection(exception):

@@ -15,7 +15,7 @@ class WriteToDb():
       self.cursore.execute("SELECT * FROM Events")
       rows = self.cursore.fetchall()
       for row in rows:
-         print row
+         print(row)
 
 # db = WriteToDb("test.db")
 # db.write_events_to_db(CalendarEvents().get_events())
