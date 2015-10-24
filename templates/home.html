@@ -1,34 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title>Status Monitor</title>
-
-
-    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
-
-
-</head>
-
-<body>
-
-    <div class="container">
-        <div class="header">
-            <nav>
-                <ul class="nav nav-pills pull-right">
-                    <li role="presentation" class="active"><a href="#">Home</a>
-                    </li>
-                    <li role="presentation"><a href="showConfigure">Configure</a>
-                    </li>
-                    <li role="presentation"><a href="get_events">Google Calendar</a>
-                    </li>
-                </ul>
-            </nav>
-            <h3 class="text-muted">Status Monitor</h3>
-        </div>
-
+{% extends "layout.html" %}
+{% block title %} Status Monitor {% endblock %}
+{% block HomeActive %}class="active"{% endblock %}
+{% block ConfigureActive %}{% endblock %}
+{% block CalendarActive %}{% endblock %}
+{% block body %}
         <div class="jumbotron">
             <h1>Configure Status Monitor</h1>
             <p class="lead"></p>
@@ -60,7 +35,4 @@
             <h4>&copy; {% block company %}{{ company }}{% endblock %} </h4>
         </footer>
 
-    </div>
-</body>
-
-</html>
+{% endblock %}

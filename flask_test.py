@@ -14,7 +14,7 @@ Triangle(app)
 
 @app.route('/')
 def hello_world():
-    # return render_template("index.html")
+    # return render_template("calendar_events.html")
     return home
 
 
@@ -36,7 +36,7 @@ def send_js(path):
     print "path: " + str(path)
     return send_from_directory("bower_components",path)
 
-@app.route('/index/sounds/<path:path>')
+@app.route('/sounds/<path:path>')
 def send_sound(path):
     print "path: " + str(path)
     return send_from_directory("sounds",path)
@@ -46,8 +46,8 @@ def index():
     return 'index'
 
 @app.route("/events", methods=['GET'])
-def echo():
-    return str(CalendarEvents().get_events())
+def events():
+    return render_template("calendar_events.html")
 
 @app.route('/showConfigure')
 def showConfigure():
