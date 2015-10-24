@@ -63,7 +63,9 @@ def configure():
 
     if _project_name and _jenkins_url and _job_name:
         f = open('config.py', 'w')
-        f.write('name=' + "'" + str(_project_name) + "'" )
+        f.write('name=' + "'" + str(_project_name) + "'" + '\n')
+        f.write('jenkinsUrl=' + "'" + str(_jenkins_url) + "'" + '\n')
+        f.write('jobName=' + "'" + str(_job_name) + "'" + '\n')
         f.close()
 
         return json.dumps({'html':'<span>All fields good !!</span>'})
@@ -80,7 +82,7 @@ def home():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
 
 
