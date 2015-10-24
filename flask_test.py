@@ -47,7 +47,7 @@ def index():
 
 @app.route("/events", methods=['GET'])
 def events():
-    return render_template("calendar_events.html")
+    return render_template("calendar_events.html", company = config.name)
 
 @app.route('/showConfigure')
 def showConfigure():

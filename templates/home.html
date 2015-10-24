@@ -21,17 +21,12 @@
                 <p>Passed</p>
 
                 <h4>Job 4 Status</h4>
-                {% block title %}Error: {{ name }}{% endblock %}
-                {% block body %}
-                  {{ status1}}
-                {% endblock %}
+                <p>Error: {{ name }} </p>
+                <p>{{ status1}} </p>
+
 
 
             </div>
         </div>
-
-        <footer class="footer">
-            <h4>&copy; {% block company %}{{ company }}{% endblock %} </h4>
-        </footer>
 
 {% endblock %}
