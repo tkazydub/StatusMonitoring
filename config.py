@@ -1,3 +1,3 @@
-name='123'
-jenkinsUrl='12312323'
-jobName='123123123123'
+name='wdwdvsdsdv'
+jenkinsUrl='sdvsdvsdv'
+jobName='weffwef'

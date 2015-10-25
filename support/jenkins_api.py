@@ -5,7 +5,7 @@ import json
 class JenkinsApi():
 	def get_job(self):
 		# server = jenkins.Jenkins('http://ci-netpulse.cogniance.com/', username='kid911', password='f0da03e34dec1f4d323ae83e9fe45ced')
-		#
+        #
 		# job_info = server.get_job_info('DEV Galaxy Server Build')
 		# json_job_info = json.dumps(job_info)
         #
