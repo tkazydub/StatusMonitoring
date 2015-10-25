@@ -4,3 +4,5 @@ venv/
 support/*.pyc
 .DS_Store
 */.DS_Store
+/.credentials
+

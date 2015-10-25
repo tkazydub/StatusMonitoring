@@ -51,7 +51,6 @@ class CalendarEvents():
         credentials = self.get_credentials()
         http = credentials.authorize(httplib2.Http())
         service = discovery.build('calendar', 'v3', http=http)
-
         now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
         print('Getting the upcoming 10 events')
         eventsResult = service.events().list(
@@ -69,6 +68,8 @@ class CalendarEvents():
                 location = event["location"]
             except KeyError:
                 location = None
-            list_of_events.append({"start": start, "end":end, "summary":summary, "location":location})
+            now = datetime.datetime.now().isoformat()
+            if start >= now:
+                list_of_events.append({"start": start, "end":end, "summary":summary, "location":location})
         print(list_of_events)
         return list_of_events

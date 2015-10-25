@@ -8,7 +8,7 @@
     app.controller('eventsCtrl', function($rootScope, $scope, $http, $timeout){
         $scope.events = null;
         (function update(){
-            $http.get('http://localhost:5000/get_events')
+            $http.get('http://localhost:5000/get_events?num=1')
                     .success(function(response) {
                         $scope.events = response.result.events;
 //                        console.log($scope.events);

@@ -21,8 +21,9 @@ def hello_world():
 @app.route('/get_events')
 def get_events():
     events = CalendarEvents().get_events()
-    if request.args.get('type',0,type=str) == "all":
-        return jsonify(result=events)
+    num = request.args.get('num',0,type=str)
+    if num and num.isdigit():
+        return jsonify(result={"events":events[0:int(num)]})
     else:
         return jsonify(result={"events":events,"count":len(events)})
 
