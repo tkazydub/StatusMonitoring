@@ -1,21 +1,21 @@
-from flask import Flask,jsonify, render_template, request, send_from_directory, url_for,json
+from flask import Flask,jsonify, render_template, request, send_from_directory, url_for,json, redirect
 from support.get_jenkins_jobs import JenkinsFeatures
 from support.get_calendar_events import CalendarEvents
 from support.jenkins_api import JenkinsApi
 import config
 from support.database import WriteToDb
-from flask.ext.triangle import Triangle
-
+# from flask.ext.triangle import Triangle
+#
 app = Flask(__name__)
-Triangle(app)
+# Triangle(app)
 
 # DATABASE = 'support/test.db'
 # db = WriteToDb(DATABASE)
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def hello_world():
     # return render_template("index.html")
-    return home
+    return redirect(url_for("home"))
 
 
 @app.route('/get_events')
