@@ -4,7 +4,4 @@ host = 'http://ci-netpulse.cogniance.com/'
 username = 'kid911'
 password = 'f0da03e34dec1f4d323ae83e9fe45ced'
 jobs_list = ["DEV Galaxy Server Build", "Netpulse-Android"]
-# job4:
-projectName='job4'
-jenkinsUrl='saddsadsa'
-jobName='sadsdasddsa'
+projectName = 'netpulse'

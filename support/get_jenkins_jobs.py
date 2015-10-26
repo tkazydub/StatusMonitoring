@@ -16,18 +16,18 @@ class JenkinsFeatures():
         return J['test_saas-shipping-ui_custom_suite'].get_last_good_build().get_console()
 
     def get_last_build_info(self):
-        response = []
+        response2 = []
 
         for job in self.jobs_list:
             job_info = self.server.get_job_info(job)
             last_build_info = self.server.get_build_info(job, job_info['lastCompletedBuild']['number'])
 
             if last_build_info['result'] == 'SUCCESS' or last_build_info['result'] == 'ABORTED':
-                response.append(dict(fullName=last_build_info['fullDisplayName'],
+                response2.append(dict(fullName=last_build_info['fullDisplayName'],
                                       status=last_build_info['result']))
 
             elif last_build_info['result'] == 'FAILURE':
-                response.append(dict(fullName=last_build_info['fullDisplayName'],
+                response2.append(dict(fullName=last_build_info['fullDisplayName'],
                                       status=last_build_info['result'],
                                       startedBy=last_build_info['actions'][1]['causes'][0]['userName']))
-        return response
+        return response2

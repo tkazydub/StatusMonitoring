@@ -52,7 +52,7 @@ def echo():
 
 @app.route('/LastBuild', methods=['GET'])
 def last_build():
-    JenkinsFeatures().get_last_build_info()
+    return json.dumps(JenkinsFeatures().get_last_build_info())
 
 @app.route('/showConfigure')
 def showConfigure():
