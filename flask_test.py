@@ -1,21 +1,22 @@
-from flask import Flask,jsonify, render_template, request, send_from_directory, url_for,json
+from flask import Flask, jsonify, render_template, request, send_from_directory, url_for
+from flask import Flask,jsonify, render_template, request, send_from_directory, url_for,json, redirect
 from support.get_jenkins_jobs import JenkinsFeatures
 from support.get_calendar_events import CalendarEvents
 from support.jenkins_api import JenkinsApi
 import config
 from support.database import WriteToDb
 from flask.ext.triangle import Triangle
-
+#
 app = Flask(__name__)
 Triangle(app)
 
 # DATABASE = 'support/test.db'
 # db = WriteToDb(DATABASE)
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def hello_world():
     # return render_template("index.html")
-    return home
+    return redirect(url_for("home"))
 
 
 @app.route('/get_events')
@@ -33,12 +34,12 @@ def jenkins():
 
 @app.route('/bower_components/<path:path>')
 def send_js(path):
-    print "path: " + str(path)
+    print("path: " + str(path))
     return send_from_directory("bower_components",path)
 
 @app.route('/index/sounds/<path:path>')
 def send_sound(path):
-    print "path: " + str(path)
+    print("path: " + str(path))
     return send_from_directory("sounds",path)
 
 @app.route('/index/')
@@ -48,6 +49,10 @@ def index():
 @app.route("/events", methods=['GET'])
 def echo():
     return str(CalendarEvents().get_events())
+
+@app.route('/LastBuild', methods=['GET'])
+def last_build():
+    return json.dumps(JenkinsFeatures().get_last_build_info())
 
 @app.route('/showConfigure')
 def showConfigure():
