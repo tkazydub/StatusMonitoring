@@ -15,7 +15,7 @@ class JenkinsFeatures():
         J = jenkins.Jenkins('http://erebor.ct.pb.com/')
         return J['test_saas-shipping-ui_custom_suite'].get_last_good_build().get_console()
 
-    def get_last_build_info(self, name):
+    def get_last_build_info(self):
         response = []
 
         for job in self.jobs_list:
