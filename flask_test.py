@@ -51,7 +51,7 @@ def echo():
 
 @app.route('/showConfigure')
 def showConfigure():
-    return render_template('configure.html', company = config.name)
+    return render_template('configure.html', company = config.projectName)
 
 @app.route('/configure',methods=['POST'])
 
@@ -61,12 +61,26 @@ def configure():
     _jenkins_url = request.form['jenkinsUrl']
     _job_name = request.form['jobName']
 
+    params = [_project_name, _jenkins_url, _job_name]
+    # print(params)
+    jobs = {1:[],2:[],3:[],4:[]}
+
     if _project_name and _jenkins_url and _job_name:
         f = open('config.py', 'w')
-        f.write('name=' + "'" + str(_project_name) + "'" + '\n')
-        f.write('jenkinsUrl=' + "'" + str(_jenkins_url) + "'" + '\n')
-        f.write('jobName=' + "'" + str(_job_name) + "'" + '\n')
+        for key in jobs:
+            print("first   " + str(key))
+            if _project_name == 'job'+str(key):
+                jobs[key] = params
+                print(jobs[key])
+                print("pass  " + str(key))
+                f.write('# '+ str(jobs[key][0]) + ':' + '\n' + 'projectName=' + "'" + str(jobs[key][0]) + "'" + '\n')
+                f.write('jenkinsUrl=' + "'" + str(jobs[key][1]) + "'" + '\n')
+                f.write('jobName=' + "'" + str(jobs[key][2]) + "'" + '\n')
+            else:
+                pass
+
         f.close()
+
 
         return json.dumps({'html':'<span>All fields good !!</span>'})
     else:
@@ -76,7 +90,7 @@ def configure():
 def home():
     JA = JenkinsApi()
     if JA.get_job()['job_status'] == 'failed':
-        return render_template('home.html', status1 = 'failed', company = config.name )
+        return render_template('home.html', status1 = 'failed', company = config.projectName )
     else:
         return 'Pass'
 
