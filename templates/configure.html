@@ -31,12 +31,23 @@
         <h1>Monitor</h1>
         <form class="form-signin">
         <label for="projectName" class="sr-only">Project Name</label>
-        <input type="name" name="projectName" id="projectName" class="form-control" placeholder="Project Name" required autofocus>
+        <input type="name" name="projectName" id="projectName" class="form-control" value = "{{ project_name }}" placeholder="Project Name" required autofocus>
         <label for="jenkinsUrl" class="sr-only">Jenkins Url</label>
-        <input type="name" name="jenkinsUrl" id="jenkinsUrl" class="form-control" placeholder="Jenkins Url" required autofocus>
-        <label for="jobName" class="sr-only">Job Name</label>
-        <input type="name" name="jobName" id="jobName" class="form-control" placeholder="Job Name" required>
-        
+        <input type="name" name="jenkinsUrl" id="jenkinsUrl" class="form-control" value = "{{ jenkins_url }}" placeholder="Jenkins Url" required autofocus>
+
+          <label for="job1" class="sr-only">Job 1</label>
+        <input type="name" name="job1" id="job1" class="form-control" value = "{{ job1 }}" placeholder="Job 1" required>
+          <label for="job2" class="sr-only">Job 2</label>
+        <input type="name" name="job2" id="job2" class="form-control" value = "{{ job2 }}" placeholder="Job 2" required>
+          <label for="job3" class="sr-only">Job 3</label>
+        <input type="name" name="job3" id="job3" class="form-control" value = "{{ job3 }}" placeholder="Job 3" required>
+          <label for="job4" class="sr-only">Job 4</label>
+        <input type="name" name="job4" id="job4" class="form-control" value = "{{ job4 }}" placeholder="Job 4" required>
+          <label for="username" class="sr-only">Username</label>
+        <input type="name" name="username" id="username" class="form-control" value = "{{ username }}" placeholder="Username" required>
+          <label for="password" class="sr-only">Password</label>
+        <input type="password" name="password" id="password" class="form-control" value = "{{ password }}" placeholder="Password" required>
+
         <button id="btnConfigure" class="btn btn-lg btn-primary btn-block" type="button">Configure</button>
       </form>
       </div>

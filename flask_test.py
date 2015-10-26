@@ -4,6 +4,7 @@ from support.get_jenkins_jobs import JenkinsFeatures
 from support.get_calendar_events import CalendarEvents
 from support.jenkins_api import JenkinsApi
 import config
+import configparser2
 from support.database import WriteToDb
 from flask.ext.triangle import Triangle
 #
@@ -56,37 +57,36 @@ def last_build():
 
 @app.route('/showConfigure')
 def showConfigure():
-    return render_template('configure.html', company = config.projectName)
+    return render_template('configure.html', company = config.projectname, job1 = config.jobs_list[0],
+                           job2 = config.jobs_list[1], job3 = config.jobs_list[2], job4 = config.jobs_list[3],
+                           project_name = config.projectname, jenkins_url = config.host, username = config.username,
+                           password = config.password)
 
 @app.route('/configure',methods=['POST'])
 
 def configure():
 
+    configparser = configparser2.ConfigParser()
     _project_name = request.form['projectName']
     _jenkins_url = request.form['jenkinsUrl']
-    _job_name = request.form['jobName']
+    _job_1 = request.form['job1']
+    _job_2 = request.form['job2']
+    _job_3 = request.form['job3']
+    _job_4 = request.form['job4']
+    _username = request.form['username']
+    _password = request.form['password']
 
-    params = [_project_name, _jenkins_url, _job_name]
-    # print(params)
-    jobs = {1:[],2:[],3:[],4:[]}
+    if _project_name and _jenkins_url and _job_1 and _job_2 and _job_3 and _job_4 and _username and _password:
 
-    if _project_name and _jenkins_url and _job_name:
-        f = open('config.py', 'w')
-        for key in jobs:
-            print("first   " + str(key))
-            if _project_name == 'job'+str(key):
-                jobs[key] = params
-                print(jobs[key])
-                print("pass  " + str(key))
-                f.write('# '+ str(jobs[key][0]) + ':' + '\n' + 'projectName=' + "'" + str(jobs[key][0]) + "'" + '\n')
-                f.write('jenkinsUrl=' + "'" + str(jobs[key][1]) + "'" + '\n')
-                f.write('jobName=' + "'" + str(jobs[key][2]) + "'" + '\n')
-            else:
-                pass
-
-        f.close()
-
-
+        configparser['"CONFIG_PARAMS "'] = {'host':"'"+_jenkins_url+"'",
+                                           'username':"'"+_username+"'",
+                                           'password':"'"+_password+"'",
+                                           'jobs_list':"["+"'"+str(_job_1)+"'"+","+" '"+str(_job_2)+"'"+","
+                                                       +" '"+str(_job_3)+"'"+","+" '"+str(_job_4)+"'"+"]",
+                                           'projectname':"'"+str(_project_name)+"'"
+                                           }
+        with open('config.py', 'w') as config:
+            configparser.write(config)
         return json.dumps({'html':'<span>All fields good !!</span>'})
     else:
         return json.dumps({'html':'<span>Enter the required fields</span>'})
@@ -95,7 +95,7 @@ def configure():
 def home():
     JA = JenkinsApi()
     if JA.get_job()['job_status'] == 'failed':
-        return render_template('home.html', status1 = 'failed', company = config.projectName )
+        return render_template('home.html', status1 = 'failed', company = config.projectname )
     else:
         return 'Pass'
 
