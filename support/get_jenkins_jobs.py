@@ -17,17 +17,26 @@ class JenkinsFeatures():
 
     def get_last_build_info(self):
         response2 = []
+        commits = []
 
         for job in self.jobs_list:
             job_info = self.server.get_job_info(job)
             last_build_info = self.server.get_build_info(job, job_info['lastCompletedBuild']['number'])
+
+            if last_build_info['actions'][5]:
+                tests = last_build_info['actions'][5]
+            else:
+                tests = dict(message='No tests were ran on this build.')
 
             if last_build_info['result'] == 'SUCCESS' or last_build_info['result'] == 'ABORTED':
                 response2.append(dict(fullName=last_build_info['fullDisplayName'],
                                       status=last_build_info['result']))
 
             elif last_build_info['result'] == 'FAILURE':
+                for item in last_build_info['changeSet']['items']:
+                    commits.append(dict(message=item['msg'], author=item['author']['fullName']))
                 response2.append(dict(fullName=last_build_info['fullDisplayName'],
                                       status=last_build_info['result'],
-                                      startedBy=last_build_info['actions'][1]['causes'][0]['userName']))
+                                      startedBy=last_build_info['actions'][1]['causes'][0]['userName'],
+                                      commits=commits, testsFailed=tests))
         return response2
