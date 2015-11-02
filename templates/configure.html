@@ -1,32 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Status Monitor</title>
-
-   
-    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
-    <link href="../static/css/signup.css" rel="stylesheet">
-    <script src="../static/js/jquery-2.1.4.min.js"></script>
-    <script src="../static/js/signUp.js"></script>
-   
-  </head>
-
-  <body>
-
-    <div class="container">
-      <div class="header">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-            <li role="presentation" ><a href="home">Home</a></li>
-            <li role="presentation" class="active"><a href="#">Configure</a></li>
-              <li role="presentation"><a href="get_events">Google Calendar</a></li>
-          </ul>
-        </nav>
-        <h3 class="text-muted">System Monitor</h3>
-      </div>
-
+{% extends "layout.html" %}
+{% block HomeActive %}{% endblock %}
+{% block ConfigureActive %}class="active"{% endblock %}
+{% block CalendarActive %}{% endblock %}
+{% block body %}
       <div class="jumbotron">
         <h1>Monitor</h1>
         <form class="form-signin">
@@ -52,12 +28,6 @@
       </form>
       </div>
 
-      
 
-        <footer class="footer">
-            <h4>&copy; {% block company %}{{ company }}{% endblock %} </h4>
-        </footer>
 
-    </div>
-  </body>
-</html>
+  {% endblock %}
