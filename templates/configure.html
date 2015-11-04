@@ -7,10 +7,11 @@
         <h1>Monitor</h1>
         <form class="form-signin">
         <label for="projectName" class="sr-only">Project Name</label>
-        <input type="name" name="projectName" id="projectName" class="form-control" value = "{{ project_name }}" placeholder="Project Name" required autofocus>
+        <input type="name" name="projectName" id="projectName" class="form-control" style="" value = "{{ project_name }}" placeholder="Project Name" required autofocus>
         <label for="jenkinsUrl" class="sr-only">Jenkins Url</label>
         <input type="name" name="jenkinsUrl" id="jenkinsUrl" class="form-control" value = "{{ jenkins_url }}" placeholder="Jenkins Url" required autofocus>
 
+          <div id="jobs" style="">
           <label for="job1" class="sr-only">Job 1</label>
         <input type="name" name="job1" id="job1" class="form-control" value = "{{ job1 }}" placeholder="Job 1" required>
           <label for="job2" class="sr-only">Job 2</label>
@@ -19,12 +20,61 @@
         <input type="name" name="job3" id="job3" class="form-control" value = "{{ job3 }}" placeholder="Job 3" required>
           <label for="job4" class="sr-only">Job 4</label>
         <input type="name" name="job4" id="job4" class="form-control" value = "{{ job4 }}" placeholder="Job 4" required>
+            </div>
           <label for="username" class="sr-only">Username</label>
         <input type="name" name="username" id="username" class="form-control" value = "{{ username }}" placeholder="Username" required>
           <label for="password" class="sr-only">Password</label>
         <input type="password" name="password" id="password" class="form-control" value = "{{ password }}" placeholder="Password" required>
 
-        <button id="btnConfigure" class="btn btn-lg btn-primary btn-block" type="button">Configure</button>
+        <button id="btnConfigure" class="btn btn-lg btn-primary btn-block" type="button" onclick = "showDiv()">Configure</button>
+          <div id="okDiv" style="display:none; color:green;" class="answer_list" > Woohoo, all data is applied</div>
+          <div id="errorDiv" style="display:none; color:red;" class="answer_list" ></div>
+
+          <script>
+          function showDiv() {
+            var congratsMessage, errorMessage, projectName, jenkinsUrl, job1, job2, job3, job4, username, password;
+            congratsMessage = document.getElementById("okDiv");
+            errorMessage = document.getElementById("errorDiv");
+            projectName = document.getElementById("projectName").value;
+            jenkinsUrl = document.getElementById("jenkinsUrl").value;
+            job1 = document.getElementById("job1").value;
+            job2 = document.getElementById("job2").value;
+            job3 = document.getElementById("job3").value;
+            job4 = document.getElementById("job4").value;
+            username = document.getElementById("username").value;
+            password = document.getElementById("password").value;
+
+            document.getElementById('okDiv').style.display = "none";
+            document.getElementById('errorDiv').style.display = "none";
+            document.getElementById('projectName').style.border = "";
+            document.getElementById('jenkinsUrl').style.border = "";
+            document.getElementById('username').style.border = "";
+            document.getElementById('password').style.border = "";
+            document.getElementById('jobs').style.border = "";
+
+            try {
+              if(projectName == "") throw "projectName";
+              if(jenkinsUrl == "") throw "jenkinsUrl";
+              if(job1 == ""&&job2 == ""&&job3 == ""&&job4 == "") throw "jobs";
+              if(username == "") throw "username";
+              if(password == "") throw "password";
+              document.getElementById('okDiv').style.display = "block";
+
+            }
+            catch(err) {
+
+              if(err != "jobs") {
+                document.getElementById('errorDiv').innerHTML = "Please enter " + err;
+              } else {
+              document.getElementById('errorDiv').innerHTML = "Please enter at least one Job"
+              }
+              document.getElementById('errorDiv').style.display = "block";
+              document.getElementById(err).style.border = "solid red";
+            }
+
+          }
+          </script>
+
       </form>
       </div>
 
