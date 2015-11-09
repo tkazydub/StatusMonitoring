@@ -75,7 +75,7 @@ def configure():
     _username = request.form['username']
     _password = request.form['password']
 
-    if _project_name and _jenkins_url and _job_1 and _job_2 and _job_3 and _job_4 and _username and _password:
+    if _project_name and _jenkins_url and (_job_1 or _job_2 or _job_3 or _job_4) and _username and _password:
 
         configparser['"CONFIG_PARAMS "'] = {'host':"'"+_jenkins_url+"'",
                                            'username':"'"+_username+"'",
