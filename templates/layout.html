@@ -12,6 +12,41 @@
     <script src="../static/js/signUp.js"></script>
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+<style>
+   .table tbody tr > td.cell {
+    display:table-cell;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+}
+   .table tbody tr > th.cell {
+    display:table-cell;
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+}
+
+    .table tbody tr > td.timer {
+    background-color: #fcf8e3 !important;
+}
+        .table tbody tr.pending {
+  background-color: #dff0d8 !important;
+}
+
+.table tbody tr.finished {
+  background-color: #f2dede !important;
+}
+
+.table tbody tr > td.warning {
+  background-color: #fcf8e3 !important;
+}
+
+.table tbody tr.inprogress {
+  background-color: #d9edf7 !important;
+}
+
+</style>
 </head>
 <body>
     <div class="container">

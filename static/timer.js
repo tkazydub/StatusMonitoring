@@ -84,10 +84,12 @@ angular.module('timer', [])
         });
 
         function calculateTimeUnits() {
-          $scope.seconds = Math.floor(($scope.millis / 1000) % 60);
-          $scope.minutes = Math.floor((($scope.millis / (60000)) % 60));
+          seconds = Math.floor(($scope.millis / 1000) % 60);
+          minutes = Math.floor((($scope.millis / (60000)) % 60));
           $scope.hours = Math.floor((($scope.millis / (3600000)) % 24));
           $scope.days = Math.floor((($scope.millis / (3600000)) / 24));
+          $scope.minutes = (minutes<10)?"0"+minutes.toString():minutes.toString();
+          $scope.seconds = (seconds<10)?"0"+seconds.toString():seconds.toString();
         }
 
         //determine initial values of time units

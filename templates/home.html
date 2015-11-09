@@ -3,32 +3,49 @@
 {% block ConfigureActive %}{% endblock %}
 {% block CalendarActive %}{% endblock %}
 {% block body %}
-        <!--<div class="jumbotron">-->
-            <!--<h1>Configure Status Monitor</h1>-->
-            <!--<p class="lead"></p>-->
-            <!--<p><a class="btn btn-lg btn-success" href="showConfigure" role="button">Configure Monitor</a>-->
-            <!--</p>-->
-        <!--</div>-->
 
 <script>
     var app = angular.module('myApp',['timer','ngAudio']);
     app.controller('eventsCtrl', function($rootScope, $scope, $http, $timeout){
         $scope.events = null;
         (function update(){
-            $http.get('http://localhost:5000/get_events?num=1')
+            $http.get('http://localhost:5000/get_events')
                     .success(function(response) {
-                        $scope.events = response.result.events;
-//                        console.log($scope.events);
+                        $scope.events = $scope.setEventsStatus(response.result.events);
+                        console.log($scope.events);
                     });
             $timeout(update,1000000);
         })();
+
+        $scope.setEventsStatus = function(events){
+
+            for (var i=0; i < events.length; i++){
+                if ($scope.countTime(events[i].start)>0){
+                     status="pending";}
+                else{
+                    if ($scope.countTime(events[i].start)<0 && $scope.countTime(events[i].end)>0) {
+                        status="inprogress";
+                    }
+                    else {
+                        status="finished";
+                    }
+                }
+                  events[i].status = status;
+          }
+            console.log("modified events:"+events.toString())
+            return events;
+        };
+
 
         $scope.formatDate = function(date)
         {
             var thisDate = new Date();
             thisDate.setTime(Date.parse(date));
-//            console.log("event time:" + thisDate.getHours() + ":" + thisDate.getMinutes());
-            return thisDate.getHours() + ":" + thisDate.getMinutes();
+            date_hours = thisDate.getHours();
+            new_hours = (date_hours<10)?"0"+date_hours.toString():date_hours.toString();
+            date_minutes = thisDate.getMinutes();
+            new_minutes = (date_minutes<10)?"0"+date_minutes.toString():date_minutes.toString();
+            return new_hours + ":" + new_minutes;
         };
         $scope.getMachineTime = function(date){
             return Date.parse(date);
@@ -48,12 +65,38 @@
         };
         $scope.$on('timer-stopped', function (event, data){
                 console.log('Timer Stopped - data = ', data);
+                $scope.setInProgress();
                 $rootScope.$broadcast('playNotificationEvent');
             });
+        $scope.setInProgress = function(){
+            events = $scope.events;
+            for (var i=0;i<events.length;i++){
+                if (events[i].status == "pending") {
+                    console.log("element number:" + i.toString());
+                    document.getElementsByName("event")[i].setAttribute("class","inprogress");
+                    $scope.events[i].status="inprogress";
+                    break;
+                }
+            }
+        };
+        $scope.setEventsFinished = function(event_ids){
+            for (var i=0;i< event_ids.length;i++){
+                document.getElementsByName("event")[event_ids[i]].setAttribute('class','finished');
+                $scope.events[event_ids[i]].status="finished";
+            }
+        };
+
+        $scope.getEventClass =function(event){
+            return event.status;
+        };
+
+        $scope.setColor = function(){
+            document.getElementsByName("event")[1].setAttribute("class","finished");
+        }
     });
 
     app.controller('playSound', function($scope, ngAudio){
-        $scope.$on('playNotificationEvent',function(){$scope.playMusic()})
+        $scope.$on('playNotificationEvent',function(){$scope.playMusic()});
         var sound = ngAudio.load("sounds/notification.mp3");
             $scope.playMusic = function(){
               sound.play();
@@ -74,24 +117,27 @@
         <div class="col-lg-6">
             <div ng-controller="eventsCtrl">
                 <h3>Events:</h3>
-                <table cellspacing="20">
+                <table class="table table-striped">
                         <tbody>
-                        <tr ng-repeat="e in events">
-                            <td ng-bind="formatDate(e.start)"></td>
-                            <th ng-bind="e.summary"></th>
-                            <td ng-bind="formatDate(e.end)"></td>
-                            <td ng-if="countTime(e.start)<20*60*1000">
+                        <tr>
+                            <th class="cell">Start Time:</th>
+                            <th class="cell">Summary:</th>
+                            <th class="cell">End Time:</th>
+                            <th class="cell">Time Left:</th>
+                        </tr>
+                        <tr ng-repeat="e in events" name="event" ng-class="getEventClass(e)">
+                            <td ng-bind="formatDate(e.start)" class="cell"></td>
+                            <td ng-bind="e.summary" class="cell"></td>
+                            <td ng-bind="formatDate(e.end)" class="cell"></td>
+                            <td ng-if="countTime(e.start)<20*60*1000&&countTime(e.start)>-30" class="cell timer">
                                 <timer interval="1000" countdown="countTime(e.start)/1000">Time Left:{{minutes|angular}}:{{seconds|angular}}</timer>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                    <button ng-click="stopTimer()">Stop Timer</button>
+                    <button ng-click="setEventsFinished([2])">Set Events Finished</button>
                 </div>
                 <div ng-controller="playSound">
-                    <button ng-click="playMusic()">Play</button>
-                    <button ng-click="stopMusic()">Stop</button>
-                    <button ng-click="pauseMusic()">Pause</button>
                 </div>
 
                 <h4>Job 1 Status</h4>
