@@ -68,8 +68,9 @@ class CalendarEvents():
                 location = event["location"]
             except KeyError:
                 location = None
-            now = datetime.datetime.now().isoformat()
-            if start >= now:
-                list_of_events.append({"start": start, "end":end, "summary":summary, "location":location})
+            # now = datetime.datetime.now().isoformat()
+            # if start >= now:
+            #     list_of_events.append({"start": start, "end":end, "summary":summary, "location":location})
+            list_of_events.append({"start": start, "end":end, "summary":summary, "location":location})
         print(list_of_events)
         return list_of_events
