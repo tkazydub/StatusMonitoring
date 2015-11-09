@@ -74,7 +74,7 @@ def configure():
     _username = request.form['username']
     _password = request.form['password']
 
-    if _project_name and _jenkins_url and _job_1 and _job_2 and _job_3 and _job_4 and _username and _password:
+    if _project_name and _jenkins_url and (_job_1 or _job_2 or _job_3 or _job_4) and _username and _password:
 
         configparser['"CONFIG_PARAMS "'] = {'host':"'"+_jenkins_url+"'",
                                            'username':"'"+_username+"'",
@@ -96,6 +96,28 @@ def home():
         return render_template('home.html', status1 = 'failed', company = config.projectname )
     else:
         return 'Pass'
+
+@app.route('/test')
+def test():
+    JA = JenkinsFeatures()
+    response = JA.get_last_build_info()
+    # response[0]['status']
+    return render_template('home.html', status1 = response[0]['status'], name1 = response[0]['fullName'], company = config.projectname,
+                            status2 = response[1]['status'], name2 = response[1]['fullName'],
+                            status3 = response[2]['status'], name3 = response[2]['fullName'],
+                            status4 = response[3]['status'], name4 = response[3]['fullName']
+                           )
+
+    # if JA.get_last_build_info():
+    # 	 return render_template('home.html', status1 = 'failed', company = config.projectname )
+
+    # if JA.get_job()['job_status'] == 'failed':
+    #     return render_template('home.html', status1 = 'failed', company = config.projectname )
+    # else:
+    #     return 'Pass'
+
+
+
 
 
 if __name__ == '__main__':
