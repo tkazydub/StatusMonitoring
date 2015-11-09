@@ -1,7 +1,6 @@
 #from jenkinsapi.jenkins import Jenkins
 import jenkins
 import config
-import json
 
 
 class JenkinsFeatures():

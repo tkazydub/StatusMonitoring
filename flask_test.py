@@ -97,11 +97,16 @@ def home():
     else:
         return 'Pass'
 
+@app.route('/get_jobs')
+def get_jobs():
+    JA = JenkinsFeatures()
+    response = JA.get_last_build_info()
+    return jsonify(result={"jobs":response})
+
 @app.route('/test')
 def test():
     JA = JenkinsFeatures()
     response = JA.get_last_build_info()
-    # response[0]['status']
     return render_template('home.html', status1 = response[0]['status'], name1 = response[0]['fullName'], company = config.projectname,
                             status2 = response[1]['status'], name2 = response[1]['fullName'],
                             status3 = response[2]['status'], name3 = response[2]['fullName'],

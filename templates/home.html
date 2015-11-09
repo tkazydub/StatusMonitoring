@@ -109,6 +109,31 @@
             };
 
     });
+
+    app.controller('jobsCtrl', function($scope,$http, $timeout){
+         $scope.jobs = null;
+        (function update(){
+            $http.get('http://localhost:5000/get_jobs')
+                    .success(function(response) {
+                        $scope.jobs = response.result.jobs;
+                        console.log($scope.jobs);
+                    });
+            $timeout(update,1000000);
+        })();
+        $scope.getJobClass = function(job){
+          if (job.status == "SUCCESS"){
+              return "success";
+          }
+          else {
+              if (job.status == "FAILURE"){
+                  return "failed";
+              }
+              else {
+                  return "aborted";
+              }
+          }
+        };
+    });
 </script>
 
 
@@ -135,23 +160,24 @@
                         </tr>
                         </tbody>
                     </table>
-                    <button ng-click="setEventsFinished([2])">Set Events Finished</button>
+                    <!--<button ng-click="setEventsFinished([1])">Set Events Finished</button>-->
                 </div>
-                <div ng-controller="playSound">
+                <div ng-controller="playSound"></div>
+                <div ng-controller="jobsCtrl">
+                    <h3>Jobs:</h3>
+                    <table class="table table-stripped">
+                        <tbody>
+                        <tr>
+                            <th class="cell">Job name:</th>
+                            <th class="cell">Job status:</th>
+                        </tr>
+                        <tr ng-repeat="j in jobs" name="job" ng-class="getJobClass(j)">
+                            <td ng-bind="j.fullName" class="cell"></td>
+                            <td ng-bind="j.status" class="cell"></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-                <h4>Job 1 {{ name1 }}</h4>
-                <p>Job Status: {{ status1 }} </p>
-
-                <h4>Job 2 {{ name2 }}</h4>
-                <p>Job Status: {{ status2 }} </p>
-
-                <h4>Job 3 {{ name3 }}</h4>
-                <p>Job Status: {{ status3 }} </p>
-
-                <h4>Job 4 {{ name4 }}</h4>
-                <p>Job Status: {{ status4 }} </p>
-
             </div>
     </div>
 </div>
