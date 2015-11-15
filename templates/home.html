@@ -146,12 +146,14 @@
                         <tr>
                             <th class="cell">Start Time:</th>
                             <th class="cell">Summary:</th>
+                            <th class="cell">Location:</th>
                             <th class="cell">End Time:</th>
                             <th class="cell">Time Left:</th>
                         </tr>
                         <tr ng-repeat="e in events" name="event" ng-class="getEventClass(e)">
                             <td ng-bind="formatDate(e.start)" class="cell"></td>
                             <td ng-bind="e.summary" class="cell"></td>
+                            <td ng-bind="e.location" class="cell"></td>
                             <td ng-bind="formatDate(e.end)" class="cell"></td>
                             <td ng-if="countTime(e.start)<20*60*1000&&countTime(e.start)>-30" class="cell timer">
                                 <timer interval="1000" countdown="countTime(e.start)/1000">Time Left:{{minutes|angular}}:{{seconds|angular}}</timer>

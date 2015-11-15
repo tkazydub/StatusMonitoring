@@ -1,10 +1,18 @@
 {% extends "layout.html" %}
 {% block HomeActive %}{% endblock %}
 {% block ConfigureActive %}class="active"{% endblock %}
-{% block CalendarActive %}{% endblock %}
 {% block body %}
-      <div class="jumbotron">
-        <h1>Monitor</h1>
+<script>
+</script>
+<div  class="jumbotron">
+
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#jenkinsSettings" data-toggle="tab">Jenkins</a></li>
+    <li><a href="#eventSettings" data-toggle="tab">Events</a></li>
+  </ul>
+  <div class="tab-content" id="tabs">
+    <div class="tab-pane active" id="jenkinsSettings">
+         <h3>Jenkins Settings</h3>
         <form class="form-signin">
         <label for="projectName" class="sr-only">Project Name</label>
         <input type="name" name="projectName" id="projectName" class="form-control" style="" value = "{{ project_name }}" placeholder="Project Name" required autofocus>
@@ -29,7 +37,16 @@
         <button id="btnConfigure" class="btn btn-lg btn-primary btn-block" type="button" onclick = "showDiv()">Configure</button>
           <div id="okDiv" style="display:none; color:green;" class="answer_list" > Woohoo, all data is applied</div>
           <div id="errorDiv" style="display:none; color:red;" class="answer_list" ></div>
-
+    </form>
+    </div>
+    <div class="tab-pane" id="eventSettings">
+        <h3>Calendar Settings</h3>
+        <form class="form-signin">
+        <input type="name" name="numberOfEvents" id="numberOfEvents" class="form-control" placeholder="Number of events to display" required autofocus>
+        </form>
+    </div>
+  </div>
+</div>
           <script>
           function showDiv() {
             var congratsMessage, errorMessage, projectName, jenkinsUrl, job1, job2, job3, job4, username, password;
@@ -74,10 +91,6 @@
 
           }
           </script>
-
-      </form>
-      </div>
-
 
 
   {% endblock %}
