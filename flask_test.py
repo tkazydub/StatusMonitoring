@@ -4,18 +4,19 @@ from support.get_calendar_events import CalendarEvents
 from support.jenkins_api import JenkinsApi
 import config
 import configparser2
-from support.database import WriteToDb
 from flask.ext.triangle import Triangle
-#
+
 app = Flask(__name__)
 Triangle(app)
 
-# DATABASE = 'support/test.db'
-# db = WriteToDb(DATABASE)
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def hello_world():
-    # return render_template("index.html")
+    return redirect(url_for("home"))
+
+
+@app.route('/index')
+def index():
     return redirect(url_for("home"))
 
 
@@ -33,25 +34,21 @@ def get_events():
 def jenkins():
     return JenkinsFeatures().get_jenkins_log()
 
+
 @app.route('/bower_components/<path:path>')
 def send_js(path):
     return send_from_directory("bower_components",path)
+
 
 @app.route('/sounds/<path:path>')
 def send_sound(path):
     return send_from_directory("sounds",path)
 
-@app.route('/index/')
-def index():
-    return 'index'
-
-@app.route("/events", methods=['GET'])
-def events():
-    return render_template("calendar_events.html", company = config.projectname)
 
 @app.route('/LastBuild', methods=['GET'])
 def last_build():
     return json.dumps(JenkinsFeatures().get_last_build_info())
+
 
 @app.route('/showConfigure')
 def showConfigure():
@@ -60,8 +57,8 @@ def showConfigure():
                            project_name = config.projectname, jenkins_url = config.host, username = config.username,
                            password = config.password)
 
-@app.route('/configure',methods=['POST'])
 
+@app.route('/configure',methods=['POST'])
 def configure():
 
     configparser = configparser2.ConfigParser()
@@ -89,6 +86,7 @@ def configure():
     else:
         return json.dumps({'html':'<span>Enter the required fields</span>'})
 
+
 @app.route('/home')
 def home():
     JA = JenkinsApi()
@@ -97,11 +95,13 @@ def home():
     else:
         return 'Pass'
 
+
 @app.route('/get_jobs')
 def get_jobs():
     JA = JenkinsFeatures()
     response = JA.get_last_build_info()
     return jsonify(result={"jobs":response})
+
 
 @app.route('/test')
 def test():
