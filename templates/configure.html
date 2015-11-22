@@ -13,26 +13,48 @@
   <div class="tab-content" id="tabs">
     <div class="tab-pane active" id="jenkinsSettings">
          <h3>Jenkins Settings</h3>
-        <form class="form-signin">
+        <form class="form-signin" action="#" id="configInputs">
         <label for="projectName" class="sr-only">Project Name</label>
-        <input type="name" name="projectName" id="projectName" class="form-control" style="" value = "{{ project_name }}" placeholder="Project Name" required autofocus>
+        <input type="name" name="projectName" id="projectName" class="form-control" style="" value = "{{ project_name }}" placeholder="Project Name" required title="Select the name of your project">
         <label for="jenkinsUrl" class="sr-only">Jenkins Url</label>
-        <input type="name" name="jenkinsUrl" id="jenkinsUrl" class="form-control" value = "{{ jenkins_url }}" placeholder="Jenkins Url" required autofocus>
+        <input type="name" name="jenkinsUrl" id="jenkinsUrl" class="form-control" value = "{{ jenkins_url }}" placeholder="Jenkins Url" required title="Enter URL of your jenkins">
 
           <div id="jobs" style="">
           <label for="job1" class="sr-only">Job 1</label>
-        <input type="name" name="job1" id="job1" class="form-control" value = "{{ job1 }}" placeholder="Job 1" required>
+        <input type="name" name="job1" id="job1" class="form-control" value = "{{ job1 }}" placeholder="Job 1" required title="Make it hard to guess" title="Enter the name of JOB 1">
           <label for="job2" class="sr-only">Job 2</label>
-        <input type="name" name="job2" id="job2" class="form-control" value = "{{ job2 }}" placeholder="Job 2" required>
+        <input type="name" name="job2" id="job2" class="form-control" value = "{{ job2 }}" placeholder="Job 2" required title="Enter the name of JOB 2">
           <label for="job3" class="sr-only">Job 3</label>
-        <input type="name" name="job3" id="job3" class="form-control" value = "{{ job3 }}" placeholder="Job 3" required>
+        <input type="name" name="job3" id="job3" class="form-control" value = "{{ job3 }}" placeholder="Job 3" required title="Enter the name of JOB 3">
           <label for="job4" class="sr-only">Job 4</label>
-        <input type="name" name="job4" id="job4" class="form-control" value = "{{ job4 }}" placeholder="Job 4" required>
+        <input type="name" name="job4" id="job4" class="form-control" value = "{{ job4 }}" placeholder="Job 4" required title="Enter the name of JOB 4">
             </div>
           <label for="username" class="sr-only">Username</label>
-        <input type="name" name="username" id="username" class="form-control" value = "{{ username }}" placeholder="Username" required>
+        <input type="name" name="username" id="username" class="form-control" value = "{{ username }}" placeholder="Username" required title="Enter your username">
           <label for="password" class="sr-only">Password</label>
-        <input type="password" name="password" id="password" class="form-control" value = "{{ password }}" placeholder="Password" required>
+        <input type="password" name="password" id="password" class="form-control" value = "{{ password }}" placeholder="Password" required title="Enter your password">
+          <style>
+
+            .tooltip {
+              background-color:#000;
+              border:1px solid #fff;
+              padding:10px 15px;
+              width:200px;
+              display:none;
+              color:#fff;
+              text-align:left;
+              font-size:12px;
+
+              /* outline radius for mozilla/firefox only */
+              -moz-box-shadow:0 0 10px #000;
+              -webkit-box-shadow:0 0 10px #000;
+            }
+          </style>
+
+          <script>
+          $("#configInputs :input").tooltip({position :"bottom left"});
+
+          </script>
 
         <button id="btnConfigure" class="btn btn-lg btn-primary btn-block" type="button" onclick = "showDiv()">Configure</button>
           <div id="okDiv" style="display:none; color:green;" class="answer_list" > Woohoo, all data is applied</div>
