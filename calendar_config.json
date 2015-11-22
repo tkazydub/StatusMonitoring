@@ -1,0 +1,12 @@
+{
+  "default_settings": {
+    "updateTime": 600,
+    "itemsToDisplay": 1,
+    "startTimerBefore": 1200
+  },
+  "user_settings":{
+    "updateTime": null,
+    "itemsToDisplay": null,
+    "startTimerBefore": null
+  }
+}

@@ -2,8 +2,7 @@ from flask import Flask,jsonify, render_template, request, send_from_directory, 
 from support.get_jenkins_jobs import JenkinsFeatures
 from support.get_calendar_events import CalendarEvents
 from support.jenkins_api import JenkinsApi
-import config
-import configparser2
+import config, re, configparser2
 from flask.ext.triangle import Triangle
 
 app = Flask(__name__)
@@ -52,33 +51,33 @@ def last_build():
 
 @app.route('/showConfigure')
 def showConfigure():
-    return render_template('configure.html', company = config.projectname, job1 = config.jobs_list[0],
-                           job2 = config.jobs_list[1], job3 = config.jobs_list[2], job4 = config.jobs_list[3],
-                           project_name = config.projectname, jenkins_url = config.host, username = config.username,
-                           password = config.password)
+    return render_template('configure.html')
 
+@app.route('/get_jenkins_configs')
+def get_jenkins_configs():
+    jenkins_configs = JenkinsFeatures().get_configs()
+    return jsonify(result={"jenkins_configs":jenkins_configs})
+
+@app.route('/get_calendar_configs')
+def get_calendar_configs():
+    calendar_configs = CalendarEvents().get_configs()
+    return jsonify(result={"calendar_configs":calendar_configs})
 
 @app.route('/configure',methods=['POST'])
 def configure():
-
     configparser = configparser2.ConfigParser()
-    _project_name = request.form['projectName']
-    _jenkins_url = request.form['jenkinsUrl']
-    _job_1 = request.form['job1']
-    _job_2 = request.form['job2']
-    _job_3 = request.form['job3']
-    _job_4 = request.form['job4']
-    _username = request.form['username']
-    _password = request.form['password']
+    print "request json : {0}".format(request.get_json(silent=True))
+    print "request: {0}".format(request.form.to_dict())
+    jConfigs = request.form.to_dict()
+    jobs_list = [value for key, value in jConfigs.items() if re.search("jenkins_job-", key)]
 
-    if _project_name and _jenkins_url and (_job_1 or _job_2 or _job_3 or _job_4) and _username and _password:
-
-        configparser['"CONFIG_PARAMS "'] = {'host':"'"+_jenkins_url+"'",
-                                           'username':"'"+_username+"'",
-                                           'password':"'"+_password+"'",
-                                           'jobs_list':"["+"'"+str(_job_1)+"'"+","+" '"+str(_job_2)+"'"+","
-                                                       +" '"+str(_job_3)+"'"+","+" '"+str(_job_4)+"'"+"]",
-                                           'projectname':"'"+str(_project_name)+"'"
+    print "jobs: {0}".format(jobs_list)
+    if jConfigs['jenkinsUrl'] and jConfigs['username'] and jConfigs['password'] and jobs_list and jConfigs['projectName']:
+        configparser['"CONFIG_PARAMS "'] = {'host': "'" + str(jConfigs['jenkinsUrl'])+"'",
+                                           'username': "'"+ str(jConfigs['username']) + "'",
+                                           'password': "'" + str(jConfigs['password'])+ "'",
+                                           'jobs_list': jobs_list,
+                                           'projectname':"'" + str(jConfigs['projectName']) + "'"
                                            }
         with open('config.py', 'w') as config:
             configparser.write(config)

@@ -1,13 +1,9 @@
 from __future__ import print_function
-import httplib2
-import os
-
+import os, json, datetime, httplib2
 from apiclient import discovery
 import oauth2client
-from oauth2client import client
-from oauth2client import tools
+from oauth2client import client, tools
 
-import datetime
 
 try:
     import argparse
@@ -74,3 +70,14 @@ class CalendarEvents():
             list_of_events.append({"start": start, "end":end, "summary":summary, "location":location})
         print(list_of_events)
         return list_of_events
+
+    def get_configs(self):
+        with open('calendar_config.json') as config:
+            data = json.load(config)
+        configs = {}
+        if data:
+            for key in data["default_settings"]:
+                configs[key] = data["user_settings"][key] if data['user_settings'][key] else data['default_settings'][key]
+        else:
+            print("Unable to find Calendar configs")
+        return configs

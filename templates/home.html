@@ -7,7 +7,8 @@
     var app = angular.module('myApp',['timer','ngAudio']);
     app.controller('eventsCtrl', function($rootScope, $scope, $http, $timeout){
         $scope.events = null;
-        (function update(){
+
+       (function update(){
             $http.get('http://localhost:5000/get_events')
                     .success(function(response) {
                         $scope.events = $scope.setEventsStatus(response.result.events);
@@ -15,7 +16,6 @@
                     });
             $timeout(update,1000000);
         })();
-
         $scope.setEventsStatus = function(events){
 
             for (var i=0; i < events.length; i++){
@@ -161,7 +161,6 @@
                         </tr>
                         </tbody>
                     </table>
-                    <!--<button ng-click="setEventsFinished([1])">Set Events Finished</button>-->
                 </div>
                 <div ng-controller="playSound"></div>
                 <div ng-controller="jobsCtrl">
@@ -170,10 +169,12 @@
                         <tbody>
                         <tr>
                             <th class="cell">Job name:</th>
-                            <th class="cell">Job status:</th>
+                            <th class="cell">Build #:</th>
+                            <th class="cell">Build status:</th>
                         </tr>
                         <tr ng-repeat="j in jobs" name="job" ng-class="getJobClass(j)">
                             <td ng-bind="j.fullName" class="cell"></td>
+                            <td ng-bind="j.buildNumber" class="cell"></td>
                             <td ng-bind="j.status" class="cell"></td>
                         </tr>
                         </tbody>
