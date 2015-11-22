@@ -63,15 +63,12 @@ def get_calendar_configs():
     calendar_configs = CalendarEvents().get_configs()
     return jsonify(result={"calendar_configs":calendar_configs})
 
-@app.route('/configure',methods=['POST'])
-def configure():
+@app.route('/configure_jenkins',methods=['POST'])
+def configure_jenkins():
     configparser = configparser2.ConfigParser()
-    print "request json : {0}".format(request.get_json(silent=True))
-    print "request: {0}".format(request.form.to_dict())
     jConfigs = request.form.to_dict()
     jobs_list = [value for key, value in jConfigs.items() if re.search("jenkins_job-", key)]
 
-    print "jobs: {0}".format(jobs_list)
     if jConfigs['jenkinsUrl'] and jConfigs['username'] and jConfigs['password'] and jobs_list and jConfigs['projectName']:
         configparser['"CONFIG_PARAMS "'] = {'host': "'" + str(jConfigs['jenkinsUrl'])+"'",
                                            'username': "'"+ str(jConfigs['username']) + "'",
@@ -85,6 +82,12 @@ def configure():
     else:
         return json.dumps({'html':'<span>Enter the required fields</span>'})
 
+
+@app.route('/configure_calendar',methods=['POST'])
+def configure_calendar():
+    c_configs = request.form.to_dict()
+    CalendarEvents().save_configs(c_configs)
+    return json.dumps({'Response':'Configs were successfully saved'})
 
 @app.route('/home')
 def home():

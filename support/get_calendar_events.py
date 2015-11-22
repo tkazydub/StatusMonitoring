@@ -81,3 +81,10 @@ class CalendarEvents():
         else:
             print("Unable to find Calendar configs")
         return configs
+
+    def save_configs(self,conf):
+        data = json.load(open('calendar_config.json'))
+        for key in conf:
+            data['user_settings'][key] = conf[key] if conf[key] else data['default_settings'][key]
+        with open('calendar_config.json','w') as f:
+            json.dump(data,f)

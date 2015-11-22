@@ -125,11 +125,11 @@
             <h3>Calendar Settings</h3>
             <form class="form-horizontal" id="eventsConfiguration">
                 <h5 align="left">Number of events to display:</h5>
-                <input type="name" name="numberOfEvents" id="numberOfEvents" class="form-control" placeholder="Number of events to display" value="{{calendarConfigs.itemsToDisplay|angular}}" required autofocus>
+                <input type="name" name="itemsToDisplay" id="numberOfEvents" class="form-control" placeholder="Number of events to display" value="{{calendarConfigs.itemsToDisplay|angular}}" required autofocus>
                 <h5 align="left">Events refresh time, ms:</h5>
                 <input type="name" name="updateTime" id="updateTime" class="form-control" placeholder="Events refresh time (seconds)" value="{{calendarConfigs.updateTime|angular}}" required>
                 <h5 align="left">Start timer before event starts, ms:</h5>
-                <input type="name" name="startTimerTime" id="startTimerTime" class="form-control" placeholder="Start timer before event starts (seconds)" value="{{calendarConfigs.startTimerBefore|angular}}" required>
+                <input type="name" name="startTimerBefore" id="startTimerTime" class="form-control" placeholder="Start timer before event starts (seconds)" value="{{calendarConfigs.startTimerBefore|angular}}" required>
                 <button id="btnConfigureCalendar" class="btn btn-lg btn-primary btn-block confirmSettings" type="button" onclick = "showDiv()">Configure</button>
             </form>
         </div>
