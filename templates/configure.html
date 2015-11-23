@@ -67,6 +67,20 @@
     .confirmSettings {
         margin-top: 3px;
     }
+    .tooltip {
+              background-color:#000;
+              border:1px solid #fff;
+              padding:10px 15px;
+              width:200px;
+              display:none;
+              color:#fff;
+              text-align:left;
+              font-size:12px;
+
+              /* outline radius for mozilla/firefox only */
+              -moz-box-shadow:0 0 10px #000;
+              -webkit-box-shadow:0 0 10px #000;
+            }
 </style>
 <div  ng-app="myApp" class="jumbotron">
     <div ng-controller="configs">
@@ -80,20 +94,19 @@
             <form class="form-horizontal" id="jenkinsConfiguration">
                 <h5 align="left">Project Name:</h5>
                 <label for="projectName" class="sr-only">Project Name</label>
-                    <input type="name" name="projectName" id="projectName" class="form-control" style="" value = "{{ jenkinsConfigs.project_name|angular }}" placeholder="Project Name" required autofocus>
+                    <input type="name" name="projectName" id="projectName" class="form-control" style="" value = "{{ jenkinsConfigs.project_name|angular }}" placeholder="Project Name" title="Select the name of your project" required autofocus>
                 <h5 align="left">Jenkins Url:</h5>
                 <label for="jenkinsUrl" class="sr-only">Jenkins Url</label>
-                    <input type="name" name="jenkinsUrl" id="jenkinsUrl" class="form-control" value = "{{ jenkinsConfigs.host|angular }}" placeholder="Jenkins Url" required autofocus>
+                    <input type="name" name="jenkinsUrl" id="jenkinsUrl" class="form-control" value = "{{ jenkinsConfigs.host|angular }}" placeholder="Jenkins Url" title="Enter URL of your jenkins" required autofocus>
                 <h5 align="left">Jenkins Credentials:</h5>
                 <label for="username" class="sr-only">Username</label>
-                    <input type="name" name="username" id="username" class="form-control" value = "{{ jenkinsConfigs.username|angular }}" placeholder="Username" required>
+                    <input type="name" name="username" id="username" class="form-control" value = "{{ jenkinsConfigs.username|angular }}" placeholder="Username" title="Enter your username" required>
                 <label for="password" class="sr-only">Password</label>
                     <input type="password" name="password" id="password" class="form-control" value = "{{ jenkinsConfigs.password|angular }}" placeholder="Password" required>
-
                 <h5 align="left">Jenkins Jobs:</h5>
                 <div ng-if="jenkinsConfigs.jobs.length>1" ng-repeat="j in jenkinsConfigs.jobs">
                     <div id="inputJob-{{j.index|angular}}" class="input-group">
-                        <input class="form-control job_name" type="text" id="job-{{j.index|angular}}" name="jenkins_job-{{j.index|angular}}" value = "{{ j.name|angular }}" placeholder="Enter Job name" required/>
+                        <input class="form-control job_name" type="text" id="job-{{j.index|angular}}" name="jenkins_job-{{j.index|angular}}" value = "{{ j.name|angular }}" placeholder="Enter Job name" title="Enter the name of JOB {{j.index|angular}}" required/>
                         <span class="input-group-btn">
 			                <button class="btn btn-danger removeJob" type="button">X</button>
 		                </span>
@@ -101,7 +114,7 @@
                 </div>
                 <div ng-if="jenkinsConfigs.jobs.length==1" ng-repeat="j in jenkinsConfigs.jobs">
                     <div id="inputJob-1" class="input-group">
-                        <input class="form-control job_name" type="text" id="job-1" name="jenkins_job-1" value = "{{ j.name|angular }}" placeholder="Enter Job name" required/>
+                        <input class="form-control job_name" type="text" id="job-1" name="jenkins_job-1" value = "{{ j.name|angular }}" placeholder="Enter Job name" title="Enter the name of JOB {{j.index|angular}}" required/>
                         <span class="input-group-btn">
 			                <button class="btn btn-danger removeJob" disabled type="button">X</button>
 		                </span>
@@ -109,7 +122,7 @@
                 </div>
                 <div ng-if="jenkinsConfigs.jobs.length==0">
                     <div id="inputJob-1" class="input-group">
-                        <input class="form-control job_name" type="text" id="job-1" name="jenkins_job-1" placeholder="Enter Job name" required/>
+                        <input class="form-control job_name" type="text" id="job-1" name="jenkins_job-1" placeholder="Enter Job name" title="Enter the name of JOB {{j.index|angular}}" required/>
                         <span class="input-group-btn">
 			                <button class="btn btn-danger removeJob" disabled type="button">X</button>
 		                </span>
@@ -138,6 +151,7 @@
 </div>
 
           <script>
+          $("#jenkinsConfiguration :input").tooltip({position :"bottom left"});
           function showDiv() {
             var congratsMessage, errorMessage, projectName, jenkinsUrl, job1, job2, job3, job4, username, password;
             congratsMessage = document.getElementById("okDiv");
