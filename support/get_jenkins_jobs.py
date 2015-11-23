@@ -20,11 +20,8 @@ class JenkinsFeatures():
 
         for job in self.jobs_list:
             job_info = self.server.get_job_info(job)
-            print "job info: {0}".format(job_info)
             last_build_info = self.server.get_build_info(job, job_info['lastCompletedBuild']['number'])
-            print "last build number: {0}".format(job_info['lastCompletedBuild']['number'])
 
-            print "last build info: {0}".format(last_build_info)
             if last_build_info['actions'][5]:
                 tests = last_build_info['actions'][5]
             else:
