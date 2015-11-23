@@ -20,12 +20,15 @@
                     });
         })();
     });
+    function showToolTip(){
+        $("#jenkinsConfiguration :input").tooltip({position :"bottom left"});
+    }
     (function($) {
   		$(document).ready(function(){
   			var count = $('div[id^="inputJob-"]').length;
             console.log("number of elements = " + count);
 			if (count < 2) $('.removeJob').attr('disabled','disabled');
-
+            showToolTip();
 			$(document)
 				.on('click', '#add_job', function() {
 			  		var $input = $('div[id^="inputJob-"]:last');
@@ -37,12 +40,14 @@
                     count = $('div[id^="inputJob-"]').length;
                     console.log("number of elements = " + count);
 			  		if (count > 1) $('.removeJob').removeAttr('disabled');
+                    showToolTip();
 			 	})
 			  	.on("click",'.removeJob',function(){
 			  		$(this).closest('div').remove();
                     count = $('div[id^="inputJob-"]').length;
                     console.log("number of elements = " + count);
 			  		if (count < 2) $('.removeJob').attr('disabled','disabled');
+                    showToolTip();
 			  	});
   		});
 	})(jQuery);
@@ -105,7 +110,7 @@
                     <input type="password" name="password" id="password" class="form-control" value = "{{ jenkinsConfigs.password|angular }}" placeholder="Password" required>
                 <h5 align="left">Jenkins Jobs:</h5>
                 <div ng-if="jenkinsConfigs.jobs.length>1" ng-repeat="j in jenkinsConfigs.jobs">
-                    <div id="inputJob-{{j.index|angular}}" class="input-group">
+                    <div id="inputJob-{{j.index|angular}}" class="input-group" onmouseover="showToolTip();">
                         <input class="form-control job_name" type="text" id="job-{{j.index|angular}}" name="jenkins_job-{{j.index|angular}}" value = "{{ j.name|angular }}" placeholder="Enter Job name" title="Enter the name of JOB {{j.index|angular}}" required/>
                         <span class="input-group-btn">
 			                <button class="btn btn-danger removeJob" type="button">X</button>
@@ -151,7 +156,7 @@
 </div>
 
           <script>
-          $("#jenkinsConfiguration :input").tooltip({position :"bottom left"});
+
           function showDiv() {
             var congratsMessage, errorMessage, projectName, jenkinsUrl, job1, job2, job3, job4, username, password;
             congratsMessage = document.getElementById("okDiv");
