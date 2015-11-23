@@ -3,39 +3,71 @@
 {% block ConfigureActive %}class="active"{% endblock %}
 {% block body %}
 <script>
+    var app = angular.module('myApp',[]);
+    app.controller('configs', function($rootScope, $scope, $http){
+        $scope.calendarConfigs = null;
+        $scope.jenkinsConfigs = null;
+        (function getJenkinsConfigs(){
+            $http.get('http://localhost:5000/get_jenkins_configs')
+                    .success(function(response) {
+                        $scope.jenkinsConfigs = response.result.jenkins_configs;
+                    });
+        })();
+        (function getCalendarConfigs(){
+            $http.get('http://localhost:5000/get_calendar_configs')
+                    .success(function(response){
+                        $scope.calendarConfigs = response.result.calendar_configs;
+                    });
+        })();
+    });
+    (function($) {
+  		$(document).ready(function(){
+  			var count = $('div[id^="inputJob-"]').length;
+            console.log("number of elements = " + count);
+			if (count < 2) $('.removeJob').attr('disabled','disabled');
+
+			$(document)
+				.on('click', '#add_job', function() {
+			  		var $input = $('div[id^="inputJob-"]:last');
+			  		var num = parseInt($input.prop("id").match(/\d+/g),10)+1;
+			  		var $newJob =
+			  			$input.clone().attr('id','inputJob-'+num)
+			  			.find('input').attr({id: 'job-'+num, name: "jenkins_job-"+num}).val("").end();
+			  		$input.after($newJob);
+                    count = $('div[id^="inputJob-"]').length;
+                    console.log("number of elements = " + count);
+			  		if (count > 1) $('.removeJob').removeAttr('disabled');
+			 	})
+			  	.on("click",'.removeJob',function(){
+			  		$(this).closest('div').remove();
+                    count = $('div[id^="inputJob-"]').length;
+                    console.log("number of elements = " + count);
+			  		if (count < 2) $('.removeJob').attr('disabled','disabled');
+			  	});
+  		});
+	})(jQuery);
 </script>
-<div  class="jumbotron">
-
-  <ul class="nav nav-tabs">
-    <li class="active"><a href="#jenkinsSettings" data-toggle="tab">Jenkins</a></li>
-    <li><a href="#eventSettings" data-toggle="tab">Events</a></li>
-  </ul>
-  <div class="tab-content" id="tabs">
-    <div class="tab-pane active" id="jenkinsSettings">
-         <h3>Jenkins Settings</h3>
-        <form class="form-signin" action="#" id="configInputs">
-        <label for="projectName" class="sr-only">Project Name</label>
-        <input type="name" name="projectName" id="projectName" class="form-control" style="" value = "{{ project_name }}" placeholder="Project Name" required title="Select the name of your project">
-        <label for="jenkinsUrl" class="sr-only">Jenkins Url</label>
-        <input type="name" name="jenkinsUrl" id="jenkinsUrl" class="form-control" value = "{{ jenkins_url }}" placeholder="Jenkins Url" required title="Enter URL of your jenkins">
-
-          <div id="jobs" style="">
-          <label for="job1" class="sr-only">Job 1</label>
-        <input type="name" name="job1" id="job1" class="form-control" value = "{{ job1 }}" placeholder="Job 1" required title="Make it hard to guess" title="Enter the name of JOB 1">
-          <label for="job2" class="sr-only">Job 2</label>
-        <input type="name" name="job2" id="job2" class="form-control" value = "{{ job2 }}" placeholder="Job 2" required title="Enter the name of JOB 2">
-          <label for="job3" class="sr-only">Job 3</label>
-        <input type="name" name="job3" id="job3" class="form-control" value = "{{ job3 }}" placeholder="Job 3" required title="Enter the name of JOB 3">
-          <label for="job4" class="sr-only">Job 4</label>
-        <input type="name" name="job4" id="job4" class="form-control" value = "{{ job4 }}" placeholder="Job 4" required title="Enter the name of JOB 4">
-            </div>
-          <label for="username" class="sr-only">Username</label>
-        <input type="name" name="username" id="username" class="form-control" value = "{{ username }}" placeholder="Username" required title="Enter your username">
-          <label for="password" class="sr-only">Password</label>
-        <input type="password" name="password" id="password" class="form-control" value = "{{ password }}" placeholder="Password" required title="Enter your password">
-          <style>
-
-            .tooltip {
+<style>
+    .btn.btn-danger.removeJob {
+    padding: 8px 10px;
+    font-size: 12px;
+    height: 34px;
+    border-radius: 0px 3px 3px 0px;
+    margin-bottom: 2px;
+    }
+    .btn.btn-success.btn-block.add-job-btn {
+        font-size: 15px;
+        height: 34px;
+        width: 50%;
+        padding: 0px;
+        float: right;
+        margin-top: 1px;
+        margin-bottom: 3px;
+    }
+    .confirmSettings {
+        margin-top: 3px;
+    }
+    .tooltip {
               background-color:#000;
               border:1px solid #fff;
               padding:10px 15px;
@@ -49,37 +81,87 @@
               -moz-box-shadow:0 0 10px #000;
               -webkit-box-shadow:0 0 10px #000;
             }
-          </style>
-
-          <script>
-          $("#configInputs :input").tooltip({position :"bottom left"});
-
-          </script>
-
-        <button id="btnConfigure" class="btn btn-lg btn-primary btn-block" type="button" onclick = "showDiv()">Configure</button>
-          <div id="okDiv" style="display:none; color:green;" class="answer_list" > Woohoo, all data is applied</div>
-          <div id="errorDiv" style="display:none; color:red;" class="answer_list" ></div>
-    </form>
-    </div>
-    <div class="tab-pane" id="eventSettings">
-        <h3>Calendar Settings</h3>
-        <form class="form-signin">
-        <input type="name" name="numberOfEvents" id="numberOfEvents" class="form-control" placeholder="Number of events to display" required autofocus>
+</style>
+<div  ng-app="myApp" class="jumbotron">
+    <div ng-controller="configs">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#jenkinsSettings" data-toggle="tab">Jenkins</a></li>
+        <li><a href="#eventSettings" data-toggle="tab">Events</a></li>
+      </ul>
+      <div class="tab-content" id="tabs">
+        <div class="tab-pane active" id="jenkinsSettings">
+             <h3>Jenkins Settings</h3>
+            <form class="form-horizontal" id="jenkinsConfiguration">
+                <h5 align="left">Project Name:</h5>
+                <label for="projectName" class="sr-only">Project Name</label>
+                    <input type="name" name="projectName" id="projectName" class="form-control" style="" value = "{{ jenkinsConfigs.project_name|angular }}" placeholder="Project Name" title="Select the name of your project" required autofocus>
+                <h5 align="left">Jenkins Url:</h5>
+                <label for="jenkinsUrl" class="sr-only">Jenkins Url</label>
+                    <input type="name" name="jenkinsUrl" id="jenkinsUrl" class="form-control" value = "{{ jenkinsConfigs.host|angular }}" placeholder="Jenkins Url" title="Enter URL of your jenkins" required autofocus>
+                <h5 align="left">Jenkins Credentials:</h5>
+                <label for="username" class="sr-only">Username</label>
+                    <input type="name" name="username" id="username" class="form-control" value = "{{ jenkinsConfigs.username|angular }}" placeholder="Username" title="Enter your username" required>
+                <label for="password" class="sr-only">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" value = "{{ jenkinsConfigs.password|angular }}" placeholder="Password" required>
+                <h5 align="left">Jenkins Jobs:</h5>
+                <div ng-if="jenkinsConfigs.jobs.length>1" ng-repeat="j in jenkinsConfigs.jobs">
+                    <div id="inputJob-{{j.index|angular}}" class="input-group">
+                        <input class="form-control job_name" type="text" id="job-{{j.index|angular}}" name="jenkins_job-{{j.index|angular}}" value = "{{ j.name|angular }}" placeholder="Enter Job name" title="Enter the name of JOB {{j.index|angular}}" required/>
+                        <span class="input-group-btn">
+			                <button class="btn btn-danger removeJob" type="button">X</button>
+		                </span>
+                    </div>
+                </div>
+                <div ng-if="jenkinsConfigs.jobs.length==1" ng-repeat="j in jenkinsConfigs.jobs">
+                    <div id="inputJob-1" class="input-group">
+                        <input class="form-control job_name" type="text" id="job-1" name="jenkins_job-1" value = "{{ j.name|angular }}" placeholder="Enter Job name" title="Enter the name of JOB {{j.index|angular}}" required/>
+                        <span class="input-group-btn">
+			                <button class="btn btn-danger removeJob" disabled type="button">X</button>
+		                </span>
+                    </div>
+                </div>
+                <div ng-if="jenkinsConfigs.jobs.length==0">
+                    <div id="inputJob-1" class="input-group">
+                        <input class="form-control job_name" type="text" id="job-1" name="jenkins_job-1" placeholder="Enter Job name" title="Enter the name of JOB {{j.index|angular}}" required/>
+                        <span class="input-group-btn">
+			                <button class="btn btn-danger removeJob" disabled type="button">X</button>
+		                </span>
+                    </div>
+                </div>
+                <button class="btn btn-success btn-block add-job-btn" id="add_job">Add new job</button>
+                <button id="btnConfigureJenkins" class="btn btn-lg btn-primary btn-block" type="button" onclick = "showDiv()">Configure</button>
+                <div id="okDiv" style="display:none; color:green;" class="answer_list" > Woohoo, all data is applied</div>
+                <div id="errorDiv" style="display:none; color:red;" class="answer_list" ></div>
         </form>
+        </div>
+        <div class="tab-pane" id="eventSettings">
+            <h3>Calendar Settings</h3>
+            <form class="form-horizontal" id="eventsConfiguration">
+                <h5 align="left">Number of events to display:</h5>
+                <input type="name" name="itemsToDisplay" id="numberOfEvents" class="form-control" placeholder="Number of events to display" value="{{calendarConfigs.itemsToDisplay|angular}}" required autofocus>
+                <h5 align="left">Events refresh time, ms:</h5>
+                <input type="name" name="updateTime" id="updateTime" class="form-control" placeholder="Events refresh time (seconds)" value="{{calendarConfigs.updateTime|angular}}" required>
+                <h5 align="left">Start timer before event starts, ms:</h5>
+                <input type="name" name="startTimerBefore" id="startTimerTime" class="form-control" placeholder="Start timer before event starts (seconds)" value="{{calendarConfigs.startTimerBefore|angular}}" required>
+                <button id="btnConfigureCalendar" class="btn btn-lg btn-primary btn-block confirmSettings" type="button" onclick = "showDiv()">Configure</button>
+            </form>
+        </div>
+      </div>
     </div>
-  </div>
 </div>
+
           <script>
+          $("#jenkinsConfiguration :input").tooltip({position :"bottom left"});
           function showDiv() {
             var congratsMessage, errorMessage, projectName, jenkinsUrl, job1, job2, job3, job4, username, password;
             congratsMessage = document.getElementById("okDiv");
             errorMessage = document.getElementById("errorDiv");
             projectName = document.getElementById("projectName").value;
             jenkinsUrl = document.getElementById("jenkinsUrl").value;
-            job1 = document.getElementById("job1").value;
-            job2 = document.getElementById("job2").value;
-            job3 = document.getElementById("job3").value;
-            job4 = document.getElementById("job4").value;
+//            job1 = document.getElementById("job-1").value;
+//            job2 = document.getElementById("job-2").value;
+//            job3 = document.getElementById("job-3").value;
+//            job4 = document.getElementById("job-4").value;
             username = document.getElementById("username").value;
             password = document.getElementById("password").value;
 
@@ -89,7 +171,7 @@
             document.getElementById('jenkinsUrl').style.border = "";
             document.getElementById('username').style.border = "";
             document.getElementById('password').style.border = "";
-            document.getElementById('jobs').style.border = "";
+//            document.getElementById('jobs').style.border = "";
 
             try {
               if(projectName == "") throw "projectName";

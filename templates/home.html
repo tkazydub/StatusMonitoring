@@ -5,16 +5,33 @@
 
 <script>
     var app = angular.module('myApp',['timer','ngAudio']);
-    app.controller('eventsCtrl', function($rootScope, $scope, $http, $timeout){
+    app.factory('eventsCtrlFactory',function($http){
+           var getConfigs = function() {
+             return $http.get('http://localhost:5000/get_calendar_configs').then(function(response){
+                 return response.data.result.calendar_configs;
+             });
+           };
+           return {getConfigs: getConfigs};
+       });
+    app.controller('eventsCtrl', function($rootScope, $scope, $http, $timeout,eventsCtrlFactory){
         $scope.events = null;
+        $scope.calendarConfigs = null;
         (function update(){
-            $http.get('http://localhost:5000/get_events')
+            var myDataPromise = eventsCtrlFactory.getConfigs();
+            myDataPromise.then(function(result){
+                $scope.calendarConfigs = result;
+                $scope.getEvents($scope.calendarConfigs.itemsToDisplay);
+                $timeout(update,$scope.calendarConfigs.updateTime*1000);
+            });
+        })();
+
+        $scope.getEvents = function(number){
+            $http.get('http://localhost:5000/get_events?num='+number)
                     .success(function(response) {
                         $scope.events = $scope.setEventsStatus(response.result.events);
                         console.log($scope.events);
-                    });
-            $timeout(update,1000000);
-        })();
+                        });
+        };
 
         $scope.setEventsStatus = function(events){
 
@@ -31,7 +48,7 @@
                 }
                   events[i].status = status;
           }
-            console.log("modified events:"+events.toString())
+            console.log("modified events:"+events.toString());
             return events;
         };
 
@@ -155,13 +172,12 @@
                             <td ng-bind="e.summary" class="cell"></td>
                             <td ng-bind="e.location" class="cell"></td>
                             <td ng-bind="formatDate(e.end)" class="cell"></td>
-                            <td ng-if="countTime(e.start)<20*60*1000&&countTime(e.start)>-30" class="cell timer">
+                            <td ng-if="countTime(e.start)<calendarConfigs.startTimerBefore*1000&&countTime(e.start)>-30" class="cell timer">
                                 <timer interval="1000" countdown="countTime(e.start)/1000">Time Left:{{minutes|angular}}:{{seconds|angular}}</timer>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                    <!--<button ng-click="setEventsFinished([1])">Set Events Finished</button>-->
                 </div>
                 <div ng-controller="playSound"></div>
                 <div ng-controller="jobsCtrl">
@@ -170,10 +186,12 @@
                         <tbody>
                         <tr>
                             <th class="cell">Job name:</th>
-                            <th class="cell">Job status:</th>
+                            <th class="cell">Build #:</th>
+                            <th class="cell">Build status:</th>
                         </tr>
                         <tr ng-repeat="j in jobs" name="job" ng-class="getJobClass(j)">
                             <td ng-bind="j.fullName" class="cell"></td>
+                            <td ng-bind="j.buildNumber" class="cell"></td>
                             <td ng-bind="j.status" class="cell"></td>
                         </tr>
                         </tbody>
