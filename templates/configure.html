@@ -28,7 +28,6 @@
   			var count = $('div[id^="inputJob-"]').length;
             console.log("number of elements = " + count);
 			if (count < 2) $('.removeJob').attr('disabled','disabled');
-            showToolTip();
 			$(document)
 				.on('click', '#add_job', function() {
 			  		var $input = $('div[id^="inputJob-"]:last');
@@ -40,14 +39,12 @@
                     count = $('div[id^="inputJob-"]').length;
                     console.log("number of elements = " + count);
 			  		if (count > 1) $('.removeJob').removeAttr('disabled');
-                    showToolTip();
 			 	})
 			  	.on("click",'.removeJob',function(){
 			  		$(this).closest('div').remove();
                     count = $('div[id^="inputJob-"]').length;
                     console.log("number of elements = " + count);
 			  		if (count < 2) $('.removeJob').attr('disabled','disabled');
-                    showToolTip();
 			  	});
   		});
 	})(jQuery);
@@ -96,7 +93,7 @@
       <div class="tab-content" id="tabs">
         <div class="tab-pane active" id="jenkinsSettings">
              <h3>Jenkins Settings</h3>
-            <form class="form-horizontal" id="jenkinsConfiguration">
+            <form class="form-horizontal" id="jenkinsConfiguration" onmousemove="showToolTip();">
                 <h5 align="left">Project Name:</h5>
                 <label for="projectName" class="sr-only">Project Name</label>
                     <input type="name" name="projectName" id="projectName" class="form-control" style="" value = "{{ jenkinsConfigs.project_name|angular }}" placeholder="Project Name" title="Select the name of your project" required autofocus>
@@ -110,7 +107,7 @@
                     <input type="password" name="password" id="password" class="form-control" value = "{{ jenkinsConfigs.password|angular }}" placeholder="Password" required>
                 <h5 align="left">Jenkins Jobs:</h5>
                 <div ng-if="jenkinsConfigs.jobs.length>1" ng-repeat="j in jenkinsConfigs.jobs">
-                    <div id="inputJob-{{j.index|angular}}" class="input-group" onmouseover="showToolTip();">
+                    <div id="inputJob-{{j.index|angular}}" class="input-group">
                         <input class="form-control job_name" type="text" id="job-{{j.index|angular}}" name="jenkins_job-{{j.index|angular}}" value = "{{ j.name|angular }}" placeholder="Enter Job name" title="Enter the name of JOB {{j.index|angular}}" required/>
                         <span class="input-group-btn">
 			                <button class="btn btn-danger removeJob" type="button">X</button>
