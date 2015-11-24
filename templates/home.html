@@ -7,7 +7,7 @@
     var app = angular.module('myApp',['timer','ngAudio']);
     app.factory('eventsCtrlFactory',function($http){
            var getConfigs = function() {
-             return $http.get('http://localhost:5000/get_calendar_configs').then(function(response){
+             return $http.get('/get_calendar_configs').then(function(response){
                  return response.data.result.calendar_configs;
              });
            };
@@ -26,7 +26,7 @@
         })();
 
         $scope.getEvents = function(number){
-            $http.get('http://localhost:5000/get_events?num='+number)
+            $http.get('/get_events?num='+number)
                     .success(function(response) {
                         $scope.events = $scope.setEventsStatus(response.result.events);
                         console.log($scope.events);
@@ -129,7 +129,7 @@
     app.controller('jobsCtrl', function($scope,$http, $timeout){
          $scope.jobs = null;
         (function update(){
-            $http.get('http://localhost:5000/get_jobs')
+            $http.get('/get_jobs')
                     .success(function(response) {
                         $scope.jobs = response.result.jobs;
                         console.log($scope.jobs);

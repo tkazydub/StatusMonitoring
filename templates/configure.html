@@ -8,13 +8,13 @@
         $scope.calendarConfigs = null;
         $scope.jenkinsConfigs = null;
         (function getJenkinsConfigs(){
-            $http.get('http://localhost:5000/get_jenkins_configs')
+            $http.get('/get_jenkins_configs')
                     .success(function(response) {
                         $scope.jenkinsConfigs = response.result.jenkins_configs;
                     });
         })();
         (function getCalendarConfigs(){
-            $http.get('http://localhost:5000/get_calendar_configs')
+            $http.get('/get_calendar_configs')
                     .success(function(response){
                         $scope.calendarConfigs = response.result.calendar_configs;
                     });
