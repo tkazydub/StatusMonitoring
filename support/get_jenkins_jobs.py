@@ -1,4 +1,4 @@
-#from jenkinsapi.jenkins import Jenkins
+from jenkinsapi.jenkins import Jenkins
 import jenkins
 import config
 import re
@@ -9,6 +9,8 @@ class JenkinsFeatures():
     password = config.password
     server = jenkins.Jenkins(host, username=username, password=password)
     jobs_list = config.jobs_list
+    jj=Jenkins(host, username=username, password=password)
+
 
     def get_jenkins_log(self):
         J = jenkins.Jenkins('http://erebor.ct.pb.com/')
@@ -16,11 +18,20 @@ class JenkinsFeatures():
 
     def get_last_build_info(self):
         response2 = []
-        commits = []
+
+        commits =''
 
         for job in self.jobs_list:
             job_info = self.server.get_job_info(job)
             last_build_info = self.server.get_build_info(job, job_info['lastCompletedBuild']['number'])
+
+            test_build = self.jj.get_job(job).get_build(job_info['lastCompletedBuild']['number'])
+            branch = test_build.get_revision_branch()[0].get('name')
+
+            if not last_build_info['changeSet']["items"]:
+                commits = 'No Commits'
+            else:
+                commits = last_build_info['changeSet']["items"][0]['msg'].partition(' ')[0]
 
             if last_build_info['actions'][5]:
                 tests = last_build_info['actions'][5]
@@ -34,16 +45,22 @@ class JenkinsFeatures():
             if last_build_info['result'] == 'SUCCESS' or last_build_info['result'] == 'ABORTED':
                 response2.append(dict(fullName=_build_name,
                                       buildNumber=last_build_info['number'],
-                                      status=last_build_info['result']))
+                                      status=last_build_info['result'],
+                                      branch=branch,
+                                      startedBy=last_build_info['actions'][1]['causes'][0]['userName'],
+                                      commits = commits,
+                                      testsFailed=str(tests['message'])))
 
             elif last_build_info['result'] == 'FAILURE':
-                for item in last_build_info['changeSet']['items']:
-                    commits.append(dict(message=item['msg'], author=item['author']['fullName']))
+                # for item in last_build_info['changeSet']['items']:
+# commits.append(dict(message=item['msg'], author=item['author']['fullName']))
                 response2.append(dict(fullName=_build_name,
                                       buildNumber=last_build_info['number'],
                                       status=last_build_info['result'],
+                                      branch=branch,
                                       startedBy=last_build_info['actions'][1]['causes'][0]['userName'],
-                                      commits=commits, testsFailed=tests))
+                                      commits = commits,
+                                      testsFailed=str(tests['message'])))
         return response2
 
     def get_configs(self):
