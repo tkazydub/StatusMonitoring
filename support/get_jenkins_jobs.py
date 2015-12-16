@@ -9,7 +9,7 @@ class JenkinsFeatures():
     password = config.password
     server = jenkins.Jenkins(host, username=username, password=password)
     jobs_list = config.jobs_list
-    jj=Jenkins(host, username=username, password=password)
+    jj = Jenkins(host, username=username, password=password)
 
 
     def get_jenkins_log(self):
@@ -42,24 +42,29 @@ class JenkinsFeatures():
             except AttributeError:
                 _build_name = last_build_info['fullDisplayName']
 
+            try:
+                started_by = last_build_info['actions'][1]['causes'][0]['userName']
+            except AttributeError:
+                started_by = last_build_info['actions'][1]['causes'][0]['shortDescription']
+
             if last_build_info['result'] == 'SUCCESS' or last_build_info['result'] == 'ABORTED':
                 response2.append(dict(fullName=_build_name,
                                       buildNumber=last_build_info['number'],
                                       status=last_build_info['result'],
                                       branch=branch,
-                                      startedBy=last_build_info['actions'][1]['causes'][0]['userName'],
-                                      commits = commits,
+                                      startedBy=started_by,
+                                      commits=commits,
                                       testsFailed=str(tests['message'])))
 
             elif last_build_info['result'] == 'FAILURE':
                 # for item in last_build_info['changeSet']['items']:
-# commits.append(dict(message=item['msg'], author=item['author']['fullName']))
+                    # commits.append(dict(message=item['msg'], author=item['author']['fullName']))
                 response2.append(dict(fullName=_build_name,
                                       buildNumber=last_build_info['number'],
                                       status=last_build_info['result'],
                                       branch=branch,
-                                      startedBy=last_build_info['actions'][1]['causes'][0]['userName'],
-                                      commits = commits,
+                                      startedBy=started_by,
+                                      commits=commits,
                                       testsFailed=str(tests['message'])))
         return response2
 
@@ -68,11 +73,11 @@ class JenkinsFeatures():
         jobs = config.jobs_list
         index = 1
         for j in jobs:
-            jobs_list.append({"name":j,"index": index})
-            index+=1
+            jobs_list.append({"name": j, "index": index})
+            index += 1
         return {
                 "project_name": config.projectname,
                 "host": config.host,
-                "username":config.username,
-                "password":config.password,
-                "jobs":jobs_list}
+                "username": config.username,
+                "password": config.password,
+                "jobs": jobs_list}
