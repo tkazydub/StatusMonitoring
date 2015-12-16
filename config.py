@@ -1,7 +1,7 @@
 ["CONFIG_PARAMS "]
-username = 'kid911'
+username = 'monitor'
 projectname = 'netpulse'
-host = 'http://ci-netpulse.cogniance.com/'
-password = 'f0da03e34dec1f4d323ae83e9fe45ced'
-jobs_list = [u'cgn-backward-compatibility-tests', u'Netpulse-iOS-One-Target-Xcode7', u'Netpulse-Android', u'Demo Galaxy Server Deploy']
+host = 'http://qa-ci-1.netpulse.ws/jenkins/'
+password = 'Qazwsx123'
+jobs_list = [u'cogniance-app-gxy-qa-1', u'cgn-Automation-tests', u'qa-server-galaxy-deploy']
 
