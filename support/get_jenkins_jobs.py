@@ -31,7 +31,7 @@ class JenkinsFeatures():
             if not last_build_info['changeSet']["items"]:
                 commits = 'No Commits'
             else:
-                commits = last_build_info['changeSet']["items"][0]['msg'].partition(' ')[0]
+                commits = last_build_info['changeSet']["items"][0]['msg']
 
             if last_build_info['actions'][5]:
                 tests = last_build_info['actions'][5]
@@ -44,7 +44,7 @@ class JenkinsFeatures():
 
             try:
                 started_by = last_build_info['actions'][1]['causes'][0]['userName']
-            except AttributeError:
+            except KeyError:
                 started_by = last_build_info['actions'][1]['causes'][0]['shortDescription']
 
             if last_build_info['result'] == 'SUCCESS' or last_build_info['result'] == 'ABORTED':
