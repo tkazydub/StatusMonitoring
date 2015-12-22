@@ -43,12 +43,13 @@ class JenkinsFeatures():
             except AttributeError:
                 _build_name = last_build_info['fullDisplayName']
 
-            for i in last_build_info['changeSet']["items"]:
-                if i['causes']:
+            for i in last_build_info['actions']:
+                print(i)
+                if i.get('causes'):
                     try:
-                        started_by = last_build_info['actions'][1]['causes'][0]['userName']
+                        started_by = i['causes'][0]['userName']
                     except KeyError:
-                        started_by = last_build_info['actions'][1]['causes'][0]['shortDescription']
+                        started_by = i['causes'][0]['shortDescription']
 
             if not last_build_info['changeSet']["items"]:
                 committers.append('No Commits')
