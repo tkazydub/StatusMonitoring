@@ -19,11 +19,10 @@ class JenkinsFeatures():
     def get_last_build_info(self):
         response2 = []
         commits =''
-        committers = []
-        committers_list = list()
 
         for job in self.jobs_list:
-
+            committers = []
+            committers_list = list()
             job_info = self.server.get_job_info(job)
             last_build_info = self.server.get_build_info(job, job_info['lastCompletedBuild']['number'])
 
