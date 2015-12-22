@@ -20,6 +20,7 @@ class JenkinsFeatures():
         response2 = []
 
         commits =''
+        committers = []
 
         for job in self.jobs_list:
             job_info = self.server.get_job_info(job)
@@ -47,12 +48,19 @@ class JenkinsFeatures():
             except KeyError:
                 started_by = last_build_info['actions'][1]['causes'][0]['shortDescription']
 
+            if not last_build_info['changeSet']["items"]:
+                committers.append('No Commits')
+            else:
+                for item in last_build_info['changeSet']["items"]:
+                    committers.append(item['author']['fullName'])
+
             if last_build_info['result'] == 'SUCCESS' or last_build_info['result'] == 'ABORTED':
                 response2.append(dict(fullName=_build_name,
                                       buildNumber=last_build_info['number'],
                                       status=last_build_info['result'],
                                       branch=branch,
                                       startedBy=started_by,
+                                      committers=committers,
                                       commits=commits,
                                       testsFailed=str(tests['message'])))
 
@@ -64,6 +72,7 @@ class JenkinsFeatures():
                                       status=last_build_info['result'],
                                       branch=branch,
                                       startedBy=started_by,
+                                      committers=committers,
                                       commits=commits,
                                       testsFailed=str(tests['message'])))
         return response2
