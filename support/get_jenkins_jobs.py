@@ -18,11 +18,12 @@ class JenkinsFeatures():
 
     def get_last_build_info(self):
         response2 = []
-
         commits =''
         committers = []
+        committers_list = list()
 
         for job in self.jobs_list:
+
             job_info = self.server.get_job_info(job)
             last_build_info = self.server.get_build_info(job, job_info['lastCompletedBuild']['number'])
 
@@ -53,16 +54,17 @@ class JenkinsFeatures():
 
             if last_build_info['changeSet']["items"] == []:
                 committers.append('No Commits')
+                committers_list = list(set(committers))
             else:
                 for item in last_build_info['changeSet']["items"]:
                     committers.append(item['author']['fullName'])
                     committers_list = list(set(committers))
 
-            if not last_build_info['changeSet']["items"]:
-                committers.append('No Commits')
-            else:
-                for item in last_build_info['changeSet']["items"]:
-                    committers.append(item['author']['fullName'])
+            #if not last_build_info['changeSet']["items"]:
+            #    committers.append('No Commits')
+            #else:
+            #    for item in last_build_info['changeSet']["items"]:
+            #        committers.append(item['author']['fullName'])
 
             if last_build_info['result'] == 'SUCCESS' or last_build_info['result'] == 'ABORTED':
                 response2.append(dict(fullName=_build_name,
@@ -75,8 +77,6 @@ class JenkinsFeatures():
                                       testsFailed=str(tests['message'])))
 
             elif last_build_info['result'] == 'FAILURE':
-                # for item in last_build_info['changeSet']['items']:
-                    # commits.append(dict(message=item['msg'], author=item['author']['fullName']))
                 response2.append(dict(fullName=_build_name,
                                       buildNumber=last_build_info['number'],
                                       status=last_build_info['result'],
