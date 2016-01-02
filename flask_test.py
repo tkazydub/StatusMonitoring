@@ -51,7 +51,7 @@ def last_build():
 
 @app.route('/showConfigure')
 def showConfigure():
-    return render_template('configure.html')
+    return render_template('configure.html',company = config.projectname)
 
 @app.route('/get_jenkins_configs')
 def get_jenkins_configs():
@@ -103,27 +103,6 @@ def get_jobs():
     JA = JenkinsFeatures()
     response = JA.get_last_build_info()
     return jsonify(result={"jobs":response})
-
-
-@app.route('/test')
-def test():
-    JA = JenkinsFeatures()
-    response = JA.get_last_build_info()
-    return render_template('home.html', status1 = response[0]['status'], name1 = response[0]['fullName'], company = config.projectname,
-                            status2 = response[1]['status'], name2 = response[1]['fullName'],
-                            status3 = response[2]['status'], name3 = response[2]['fullName'],
-                            status4 = response[3]['status'], name4 = response[3]['fullName']
-                           )
-
-    # if JA.get_last_build_info():
-    # 	 return render_template('home.html', status1 = 'failed', company = config.projectname )
-
-    # if JA.get_job()['job_status'] == 'failed':
-    #     return render_template('home.html', status1 = 'failed', company = config.projectname )
-    # else:
-    #     return 'Pass'
-
-
 
 
 
