@@ -1,0 +1,33 @@
+ .btn.btn-danger.removeJob {
+    padding: 8px 10px;
+    font-size: 12px;
+    height: 34px;
+    border-radius: 0px 3px 3px 0px;
+    margin-bottom: 2px;
+    }
+    .btn.btn-success.btn-block.add-job-btn {
+        font-size: 15px;
+        height: 34px;
+        width: 50%;
+        padding: 0px;
+        float: right;
+        margin-top: 1px;
+        margin-bottom: 3px;
+    }
+    .confirmSettings {
+        margin-top: 3px;
+    }
+    .tooltip {
+              background-color:#000;
+              border:1px solid #fff;
+              padding:10px 15px;
+              width:200px;
+              display:none;
+              color:#fff;
+              text-align:left;
+              font-size:12px;
+
+              /* outline radius for mozilla/firefox only */
+              -moz-box-shadow:0 0 10px #000;
+              -webkit-box-shadow:0 0 10px #000;
+            }
