@@ -35,15 +35,15 @@
                 <div ng-controller="playSound"></div>
                 <div ng-controller="jobsCtrl">
                     <h3>Jobs:</h3>
-                    <table class="table table-stripped">
+                    <table class="table table-stripped" border-collapse="separate" background="#fafafa">
                         <tbody>
                         <tr>
                             <th class="cell">Job name:</th>
                             <th class="cell">Build #:</th>
                             <th class="cell">Build status:</th>
                             <th class="cell">Branch:</th>
-                            <th class="cell">Commits:</th>
-                            <th class="cell">Test failed:</th>
+                            <th class="cell">committers:</th>
+                            <!--<th class="cell">Test failed:</th>-->
                             <th class="cell">Started by:</th>
                         </tr>
                         <tr ng-repeat="j in jobs" name="job" ng-class="getJobClass(j)">
@@ -51,8 +51,8 @@
                             <td ng-bind="j.buildNumber" class="cell"></td>
                             <td ng-bind="j.status" class="cell"></td>
                             <td ng-bind="j.branch" class="cell"></td>
-                            <td ng-bind="j.commits" class="cell"></td>
-                            <td ng-bind="j.testsFailed" class="cell"></td>
+                            <td ng-bind="j.committers" class="cell"></td>
+                            <!--<td ng-bind="j.testsFailed" class="cell"></td>-->
                             <td ng-bind="j.startedBy" class="cell"></td>
                         </tr>
                         </tbody>
