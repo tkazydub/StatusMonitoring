@@ -1,11 +1,16 @@
  .table tbody tr > td.cell {
+    border: 1px solid black;
     display:table-cell;
     white-space: nowrap;
     overflow:hidden;
     text-overflow: ellipsis;
     margin: 0;
+    font-family: "consolas", Sans-serif;
+    font-size: 15px;
 }
    .table tbody tr > th.cell {
+    background-color: #F1F1F1;
+    border: 1px solid black;
     display:table-cell;
     white-space: nowrap;
     overflow:hidden;
@@ -30,11 +35,11 @@
 }
 
 .table tbody tr.finished {
-  background-color: #f2dede !important;
+  background-color: #ECABAC !important;
 }
 
 .table tbody tr.failed {
-  background-color: #f2dede !important;
+  background-color: #ECABAC !important;
 }
 
 .table tbody tr > td.warning {
