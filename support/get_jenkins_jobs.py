@@ -64,6 +64,10 @@ class JenkinsFeatures():
             #else:
             #    for item in last_build_info['changeSet']["items"]:
             #        committers.append(item['author']['fullName'])
+            # try:
+            #     started_by = last_build_info['actions'][1]['causes'][0]['userName']
+            # except KeyError:
+            #     started_by = last_build_info['actions'][1]['causes'][0]['shortDescription']
 
             if last_build_info['result'] == 'SUCCESS' or last_build_info['result'] == 'ABORTED':
                 response2.append(dict(fullName=_build_name,
